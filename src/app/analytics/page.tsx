@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import MobileNav from "@/components/MobileNav";
 import {
@@ -25,6 +25,25 @@ import {
 
 export default function AnalyticsPage() {
   const [activeTab, setActiveTab] = useState<"performance" | "business">("performance");
+  const [metricsData, setMetricsData] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchMetrics = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
+        const res = await fetch(`${apiUrl}/api/radar/metrics`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json?.data) {
+            setMetricsData(json.data);
+          }
+        }
+      } catch {
+        // Gracefully use initial state
+      }
+    };
+    fetchMetrics();
+  }, []);
 
   // SaaS Simulator States
   const [starterCount, setStarterCount] = useState(25);
