@@ -1,151 +1,597 @@
-import Link from "next/link";
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import MobileNav from "@/components/MobileNav";
+import {
+  Search,
+  Bell,
+  Sparkles,
+  BookOpen,
+  Layers,
+  Smartphone,
+  LayoutGrid,
+  MapPin,
+  Calendar,
+  Image as ImageIcon,
+  ArrowRight,
+  Plus,
+  Compass,
+  Home as HomeIcon,
+  FolderOpen,
+  Send,
+  BarChart2,
+  Globe,
+  Settings,
+  Sliders,
+  Lightbulb,
+} from "lucide-react";
+import CreatorBrainModal, { PRESET_PROFILES, CreatorProfileData } from "@/components/CreatorBrainModal";
+
+export default function NuFrameApp() {
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isBrainModalOpen, setIsBrainModalOpen] = useState(false);
+  const [activeProfile, setActiveProfile] = useState<CreatorProfileData>(PRESET_PROFILES.ananya);
+  const [rawIdea, setRawIdea] = useState("");
+
+  const filters = ["All", "Travel", "Life", "Food", "Friends", "Work", "Unpublished"];
+
+  const journals = [
+    {
+      id: "pondicherry",
+      title: "Pondicherry",
+      subtitle: "French Quarter & Promenade",
+      date: "May 2026",
+      photosCount: 24,
+      storiesCount: 3,
+      location: "Pondicherry, India",
+      tag: "Travel",
+      coverImage: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80",
+      featuredQuote: "Yellow walls, salty air and quiet alleyways.",
+    },
+    {
+      id: "goa",
+      title: "Goa Trip",
+      subtitle: "Sunsets & Old Portuguese Mansions",
+      date: "Apr 2026",
+      photosCount: 42,
+      storiesCount: 5,
+      location: "Goa, India",
+      tag: "Life",
+      coverImage: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=800&q=80",
+      featuredQuote: "Good food. Better company. Unforgettable sunsets.",
+    },
+    {
+      id: "hyderabad",
+      title: "Hyderabad",
+      subtitle: "Charminar, Chai & Evening Lights",
+      date: "Mar 2026",
+      photosCount: 18,
+      storiesCount: 2,
+      location: "Hyderabad, India",
+      tag: "Food",
+      coverImage: "https://images.unsplash.com/photo-1605649487212-47bdab064df7?auto=format&fit=crop&w=800&q=80",
+      featuredQuote: "Irani chai, pearls and old city stories.",
+    },
+    {
+      id: "ooty",
+      title: "Ooty",
+      subtitle: "Tea Estates & Nilgiri Mountain Rails",
+      date: "Feb 2026",
+      photosCount: 36,
+      storiesCount: 4,
+      location: "Tamil Nadu, India",
+      tag: "Travel",
+      coverImage: "https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=800&q=80",
+      featuredQuote: "Misty hills and eucalyptus breezes.",
+    },
+  ];
+
+  const quickActions = [
+    {
+      label: "Journal",
+      icon: BookOpen,
+      href: "/studio?mode=journal",
+      bg: "bg-[#F4ECE4]",
+      textColor: "text-[#C96B4B]",
+      borderColor: "border-[#C96B4B]/30",
+    },
+    {
+      label: "Carousel",
+      icon: Layers,
+      href: "/studio?mode=carousel",
+      bg: "bg-[#EAF0E6]",
+      textColor: "text-[#60735A]",
+      borderColor: "border-[#60735A]/30",
+    },
+    {
+      label: "Story",
+      icon: Smartphone,
+      href: "/studio?mode=story",
+      bg: "bg-[#F7F2E6]",
+      textColor: "text-[#C6A15B]",
+      borderColor: "border-[#C6A15B]/30",
+    },
+    {
+      label: "Collage",
+      icon: LayoutGrid,
+      href: "/studio?mode=collage",
+      bg: "bg-[#ECE8E1]",
+      textColor: "text-[#6F6A62]",
+      borderColor: "border-[#6F6A62]/30",
+    },
+  ];
+
+  const sidebarLinks = [
+    { label: "Home", href: "/", icon: HomeIcon, active: true },
+    { label: "My Journals", href: "/", icon: BookOpen },
+    { label: "Create", href: "/studio", icon: Plus, tourId: "studio-btn" },
+    { label: "Templates", href: "/studio", icon: LayoutGrid },
+    { label: "Publish", href: "/dashboard", icon: Send, tourId: "creator-vault" },
+    { label: "Trends & Signals", href: "/trends", icon: Compass, tourId: "trend-radar" },
+    { label: "Analytics", href: "/analytics", icon: BarChart2 },
+    { label: "Explore", href: "/", icon: Globe },
+  ];
+
+  const filteredJournals = journals.filter((j) => {
+    const matchesFilter = activeFilter === "All" || j.tag === activeFilter;
+    const matchesSearch =
+      j.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      j.location.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
+
   return (
-    <div className="flex min-h-screen flex-col bg-[#050505] font-sans text-gray-100 selection:bg-indigo-500 selection:text-white">
-      {/* Header */}
-      <header className="border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="mx-auto flex max-w-7xl h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3">
-            <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-indigo-500/30">
-              <Image 
-                src="/icon-192x192.png" 
-                alt="NuFrame Logo" 
+    <div className="min-h-screen bg-[#F7F4EE] text-[#171717] font-sans flex flex-col md:flex-row">
+      {/* ============================================================== */}
+      {/* DESKTOP SIDEBAR (Visible on md+ screens matching brand mockup) */}
+      {/* ============================================================== */}
+      <aside className="hidden md:flex flex-col w-64 bg-[#EDE8DE] border-r border-[#DBD2C7] p-5 justify-between shrink-0 sticky top-0 h-screen">
+        <div className="space-y-6">
+          {/* Brand Logo & Lockup */}
+          <Link href="/" className="flex items-center gap-3" data-tour="brand-logo">
+            <div className="w-8 h-8 relative">
+              <Image
+                src="/nuframe-infinite-frame-mark.svg"
+                alt="NuFrame Logo"
                 fill
-                className="object-cover"
+                className="object-contain"
+                priority
               />
             </div>
-            <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-              NuFrame
-            </span>
-            <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-xs font-semibold text-indigo-400 border border-indigo-500/20">
-              Creator OS
-            </span>
-          </div>
-          
-          <nav className="flex items-center gap-6">
-            <Link href="/dashboard" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
-              The Vault
-            </Link>
-            <Link href="/studio" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
-              The Studio
-            </Link>
-            <Link 
-              href="/dashboard" 
-              className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all duration-200 hover:scale-[1.02]"
+            <div>
+              <span className="font-serif text-2xl font-bold tracking-tight text-[#171717]">
+                NuFrame
+              </span>
+              <p className="text-[10px] font-semibold tracking-wider text-[#6F6A62] uppercase">
+                Creator OS
+              </p>
+            </div>
+          </Link>
+
+          {/* Navigation Links */}
+          <nav className="space-y-1">
+            {sidebarLinks.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  data-tour={item.tourId}
+                  className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                    item.active
+                      ? "bg-[#C96B4B]/15 text-[#C96B4B] shadow-sm"
+                      : "text-[#6F6A62] hover:text-[#171717] hover:bg-[#E5DFD4]"
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 ${item.active ? "text-[#C96B4B]" : ""}`} />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+
+            {/* Re-trigger Interactive Tour */}
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("start-nuframe-tour"))}
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-[#6F6A62] hover:text-[#C96B4B] hover:bg-[#E5DFD4] transition-all w-full text-left group"
             >
-              Open Dashboard
-            </Link>
+              <Sparkles className="w-4 h-4 text-[#C96B4B] group-hover:rotate-12 transition-transform" />
+              <span>Interactive Tour</span>
+            </button>
           </nav>
         </div>
-      </header>
 
-      {/* Hero Section */}
-      <main className="flex-1">
-        <section className="relative overflow-hidden pt-24 pb-20 sm:pt-32">
-          {/* Ambient Glows */}
-          <div className="absolute top-1/4 left-1/2 -z-10 h-[400px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-600/10 blur-[120px]" />
-          <div className="absolute top-1/3 left-1/3 -z-10 h-[300px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-600/10 blur-[100px]" />
-
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl bg-gradient-to-b from-white via-gray-200 to-gray-500 bg-clip-text text-transparent">
-              Command Center for <br />
-              <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Social Media Creators
-              </span>
-            </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-400">
-              A unified operating workspace to design seamless panoramic carousels, store assets in your own cloud drives, and publish directly across all networks.
-            </p>
-            
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Link
-                href="/studio"
-                className="rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-indigo-500/20 hover:opacity-90 transition-all hover:scale-[1.03] duration-200"
-              >
-                Create Panoramic Carousel
-              </Link>
-              <Link href="/dashboard" className="text-base font-semibold leading-6 text-gray-300 hover:text-white transition-colors flex items-center gap-1">
-                Explore Vault <span aria-hidden="true">→</span>
-              </Link>
+        {/* User Profile Card at Sidebar Footer */}
+        <div
+          onClick={() => setIsBrainModalOpen(true)}
+          className="pt-4 border-t border-[#DBD2C7] flex items-center justify-between cursor-pointer group hover:bg-[#E5DFD4]/60 p-2 rounded-xl transition-all"
+          title="Inspect & Switch Creator Brain"
+        >
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-full overflow-hidden border border-[#C96B4B]/40 relative">
+              <Image
+                src={activeProfile.avatar}
+                alt={activeProfile.name}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform"
+              />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-[#171717]">{activeProfile.name}</p>
+              <p className="text-[10px] text-[#C96B4B] font-semibold">Brain Active ⚙️</p>
             </div>
           </div>
-        </section>
-
-        {/* Feature Grid */}
-        <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            
-            {/* Pillar A: The Studio */}
-            <div className="relative group overflow-hidden rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-sm transition-all duration-300 hover:border-indigo-500/20 hover:bg-white/[0.04]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-400 mb-4 group-hover:bg-indigo-500/20 transition-colors">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122l9.37-9.37m0 0l-2.25-2.25m2.25 2.25v2.25m-9.37 9.37L3 21l1.878-5.282 9.37-9.37z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-white">The Studio</h3>
-              <p className="mt-2 text-sm text-gray-400">
-                Design stunning panoramas with our automated carousel swipe mathematics. No manual alignments needed.
-              </p>
-            </div>
-
-            {/* Pillar B: The Vault */}
-            <div className="relative group overflow-hidden rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-sm transition-all duration-300 hover:border-purple-500/20 hover:bg-white/[0.04]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-500/10 text-purple-400 mb-4 group-hover:bg-purple-500/20 transition-colors">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9.75v6.75m0 0l-3-3m3 3l3-3m-8.25 6a9 9 0 1116.5 0" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-white">The Vault</h3>
-              <p className="mt-2 text-sm text-gray-400">
-                Integrate directly with your own Google Drive. Zero host-side files locking, total data ownership.
-              </p>
-            </div>
-
-            {/* Pillar C: The Broadcaster */}
-            <div className="relative group overflow-hidden rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-sm transition-all duration-300 hover:border-pink-500/20 hover:bg-white/[0.04]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-pink-500/10 text-pink-400 mb-4 group-hover:bg-pink-500/20 transition-colors">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-white">Broadcaster</h3>
-              <p className="mt-2 text-sm text-gray-400">
-                Schedule and auto-resize creations. Push directly to Instagram and WhatsApp through structured pipelines.
-              </p>
-            </div>
-
-            {/* Pillar D: The Radar */}
-            <div className="relative group overflow-hidden rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-sm transition-all duration-300 hover:border-emerald-500/20 hover:bg-white/[0.04]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400 mb-4 group-hover:bg-emerald-500/20 transition-colors">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-white">The Radar</h3>
-              <p className="mt-2 text-sm text-gray-400">
-                Unified analytics dashboards syncing performance stats back to specific creative assets in your cloud.
-              </p>
-            </div>
-
-          </div>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-white/5 py-8 mt-auto bg-[#030303]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-gray-500">
-            &copy; 2026 NuFrame Creator OS. Licensed under Developer Grand Prix paradigm.
-          </p>
-          <div className="flex items-center gap-6">
-            <span className="text-xs text-gray-500">FastAPI Backend</span>
-            <span className="text-xs text-gray-500">React Next.js PWA</span>
-            <span className="text-xs text-gray-500">Supabase DB</span>
-          </div>
+          <button className="text-[#6F6A62] group-hover:text-[#171717]" aria-label="Settings">
+            <Settings className="w-4 h-4" />
+          </button>
         </div>
-      </footer>
+      </aside>
+
+      {/* ============================================================== */}
+      {/* MAIN VIEWPORT (Responsive: Mobile PWA on small, Webapp on md+) */}
+      {/* ============================================================== */}
+      <div className="flex-1 flex flex-col min-h-screen">
+        {/* Mobile Header (Hidden on md+) */}
+        <header className="md:hidden sticky top-0 z-40 bg-[#F7F4EE]/90 backdrop-blur-md px-4 py-3 border-b border-[#DBD2C7]/60">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 relative">
+                <Image
+                  src="/nuframe-infinite-frame-mark.svg"
+                  alt="NuFrame Logo"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+              <span className="font-serif text-xl font-bold tracking-tight text-[#171717]">
+                NuFrame
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {/* Mobile Tour Button */}
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent("start-nuframe-tour"))}
+                className="w-9 h-9 rounded-full bg-[#EDE8DE] flex items-center justify-center text-[#C96B4B] hover:bg-[#E5DFD4] transition-colors"
+                aria-label="Start interactive feature tour"
+                title="Interactive Tour"
+              >
+                <Sparkles className="w-4 h-4" />
+              </button>
+              <Link
+                href="/dashboard"
+                className="w-9 h-9 rounded-full bg-[#EDE8DE] flex items-center justify-center text-[#6F6A62] hover:text-[#171717] transition-colors"
+                aria-label="Vault"
+              >
+                <ImageIcon className="w-4 h-4" />
+              </Link>
+              <button
+                className="w-9 h-9 rounded-full bg-[#EDE8DE] flex items-center justify-center text-[#6F6A62] hover:text-[#171717] transition-colors relative"
+                aria-label="Notifications"
+              >
+                <Bell className="w-4 h-4" />
+                <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#C96B4B]" />
+              </button>
+              <div
+                onClick={() => setIsBrainModalOpen(true)}
+                className="w-9 h-9 rounded-full overflow-hidden border border-[#C96B4B]/40 relative cursor-pointer"
+                title="Inspect Creator Brain"
+              >
+                <Image
+                  src={activeProfile.avatar}
+                  alt={activeProfile.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Desktop Webapp Header (Visible on md+) */}
+        <header className="hidden md:flex items-center justify-between px-8 py-5 border-b border-[#DBD2C7]/60 bg-[#F7F4EE]/80 backdrop-blur-md sticky top-0 z-30">
+          <div>
+            <h1 className="font-serif text-2xl font-bold tracking-tight text-[#171717]">
+              Good morning, {activeProfile.name}
+            </h1>
+            <p className="text-xs text-[#6F6A62] mt-0.5">
+              Turn your moments into visual stories · {activeProfile.role}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-4">
+            {/* Desktop Search Bar */}
+            <div className="relative w-80">
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#6F6A62]" />
+              <input
+                type="text"
+                placeholder="Search your journals, photos or templates..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-[#EDE8DE] border border-[#DBD2C7] rounded-full pl-9 pr-4 py-2 text-xs text-[#171717] placeholder-[#6F6A62] focus:outline-none focus:ring-1 focus:ring-[#C96B4B] transition-all"
+              />
+            </div>
+
+            <button
+              className="w-9 h-9 rounded-full bg-[#EDE8DE] flex items-center justify-center text-[#6F6A62] hover:text-[#171717] transition-colors relative"
+              aria-label="Notifications"
+            >
+              <Bell className="w-4 h-4" />
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#C96B4B]" />
+            </button>
+
+            {/* "Take Tour" Interactive Guide CTA */}
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("start-nuframe-tour"))}
+              className="inline-flex items-center gap-1.5 bg-[#EDE8DE] hover:bg-[#E5DFD4] text-[#171717] text-xs font-semibold px-3.5 py-2 rounded-full border border-[#DBD2C7] transition-all cursor-pointer shadow-sm active:scale-95"
+              aria-label="Start interactive feature tour"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#C96B4B]" />
+              <span>Take Tour</span>
+            </button>
+
+            {/* "+ Create Journal" Desktop CTA Button */}
+            <Link
+              href="/studio"
+              data-tour="studio-btn"
+              className="inline-flex items-center gap-2 bg-[#C96B4B] text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-md shadow-[#C96B4B]/20 hover:bg-[#B85C43] active:scale-95 transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              Create Journal
+            </Link>
+          </div>
+        </header>
+
+        {/* Main Content Area */}
+        <main className="flex-1 px-4 md:px-8 py-4 space-y-6 max-w-6xl w-full">
+          {/* Mobile Search Bar (Only shown on mobile) */}
+          <div className="md:hidden relative">
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#6F6A62]" />
+            <input
+              type="text"
+              placeholder="Search your journals, photos or templates..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-[#EDE8DE] border border-[#DBD2C7] rounded-full pl-9 pr-4 py-2.5 text-xs text-[#171717] placeholder-[#6F6A62] focus:outline-none focus:ring-1 focus:ring-[#C96B4B] transition-all"
+            />
+          </div>
+
+          {/* AI Story Spark Card */}
+          <section
+            data-tour="ai-director-banner"
+            className="bg-gradient-to-br from-[#EDE8DE] via-[#F4ECE4] to-[#F7F4EE] border border-[#C96B4B]/30 rounded-2xl p-5 shadow-sm relative overflow-hidden"
+          >
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="space-y-1 pr-4">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#C96B4B]/15 text-[#C96B4B] text-[10px] font-bold tracking-wide uppercase">
+                  <Sparkles className="w-3 h-3" />
+                  Multimodal AI Director
+                </div>
+                <h2 className="font-serif text-lg font-bold text-[#171717]">
+                  Have fresh photos to journal?
+                </h2>
+                <p className="text-xs text-[#6F6A62] max-w-xl leading-relaxed">
+                  Upload 3–5 pictures from your camera roll. NuFrame AI analyzes lighting, mood, story angles, and directs your next multi-slide carousel.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <Link
+                  href="/studio?action=upload"
+                  className="inline-flex items-center gap-2 bg-[#C96B4B] text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-md shadow-[#C96B4B]/20 hover:bg-[#B85C43] active:scale-95 transition-all"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  Upload & Auto-Direct
+                </Link>
+                <Link
+                  href="/trends"
+                  className="inline-flex items-center gap-1.5 bg-white/70 border border-[#DBD2C7] text-[#171717] text-xs font-medium px-3.5 py-2.5 rounded-full hover:bg-white transition-all"
+                >
+                  <Compass className="w-3.5 h-3.5 text-[#60735A]" />
+                  Check Trends
+                </Link>
+              </div>
+            </div>
+
+            {/* Idea Inbox Row (PRD 5.2 & FR-02) */}
+            <div className="mt-4 pt-3 border-t border-[#DBD2C7]/60 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+              <div className="relative flex-1">
+                <Lightbulb className="w-3.5 h-3.5 text-[#C96B4B] absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Idea Inbox: e.g. 48 hours in Pondicherry, slow chai notes..."
+                  value={rawIdea}
+                  onChange={(e) => setRawIdea(e.target.value)}
+                  className="w-full bg-white/80 border border-[#DBD2C7] rounded-full pl-8 pr-3 py-2 text-xs text-[#171717] placeholder-[#9C9890] focus:outline-none focus:ring-1 focus:ring-[#C96B4B]"
+                />
+              </div>
+              <Link
+                href={`/studio?idea=${encodeURIComponent(rawIdea || "Visual storytelling reflections")}`}
+                className="bg-[#1C1B19] hover:bg-[#2A2926] text-white text-xs font-semibold px-4 py-2 rounded-full flex items-center justify-center gap-1.5 transition-all shadow-sm shrink-0"
+              >
+                <Sparkles className="w-3 h-3 text-[#D97855]" />
+                <span>Send to Studio</span>
+              </Link>
+            </div>
+          </section>
+
+          {/* Desktop & Mobile Multi-Platform Banner for AI Builder Cup Review */}
+          <section className="hidden md:flex items-center justify-between bg-white border border-[#DBD2C7] rounded-2xl p-5 shadow-sm gap-6">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EAF0E6] text-[#60735A] border border-[#60735A]/20">
+                  AI Builder Cup 2026 Ready
+                </span>
+                <span className="text-xs font-semibold text-[#6F6A62]">
+                  3-Way Cross-Platform Architecture
+                </span>
+              </div>
+              <h3 className="font-serif text-base font-bold text-[#171717]">
+                Experience NuFrame on Mobile PWA & Desktop Webapp
+              </h3>
+              <p className="text-xs text-[#6F6A62] max-w-lg leading-relaxed">
+                Scan this QR code on your smartphone to launch the <strong>Mobile PWA</strong> with native standalone install, camera access, and offline caching. The <strong>React Native app</strong> is simultaneously running in Expo Go for Play Store publishing.
+              </p>
+              <div className="flex items-center gap-4 pt-1 text-xs font-semibold">
+                <span className="flex items-center gap-1 text-[#C96B4B]">
+                  ✓ Mobile PWA (Zero Install Friction)
+                </span>
+                <span className="flex items-center gap-1 text-[#60735A]">
+                  ✓ Desktop Creator OS
+                </span>
+                <span className="flex items-center gap-1 text-[#171717]">
+                  ✓ React Native (Expo Go Active)
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center shrink-0 bg-[#F7F4EE] p-3 rounded-2xl border border-[#DBD2C7]">
+              <div className="w-24 h-24 relative bg-white p-1 rounded-xl shadow-inner border border-[#DBD2C7]">
+                <Image
+                  src="/nuframe_pwa_qr.png"
+                  alt="Scan for Mobile PWA"
+                  fill
+                  className="object-contain p-1"
+                />
+              </div>
+              <span className="text-[10px] font-bold text-[#171717] mt-1.5">
+                Scan for Mobile PWA
+              </span>
+              <span className="text-[9px] text-[#6F6A62]">
+                192.168.29.47:3000
+              </span>
+            </div>
+          </section>
+
+          {/* Quick Actions Row (Mobile PWA Grid) */}
+          <section data-tour="quick-actions" className="md:hidden space-y-2.5">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-[#6F6A62]">
+              Create Something New
+            </h2>
+            <div className="grid grid-cols-4 gap-2.5">
+              {quickActions.map((action) => {
+                const Icon = action.icon;
+                return (
+                  <Link
+                    key={action.label}
+                    href={action.href}
+                    className="flex flex-col items-center group"
+                  >
+                    <div
+                      className={`w-14 h-14 rounded-2xl ${action.bg} border ${action.borderColor} flex items-center justify-center ${action.textColor} shadow-sm group-hover:scale-105 active:scale-95 transition-all duration-200`}
+                    >
+                      <Icon className="w-6 h-6 stroke-[1.8]" />
+                    </div>
+                    <span className="text-[11px] font-medium text-[#171717] mt-1.5">
+                      {action.label}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* Filter Pills */}
+          <section>
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
+              {filters.map((filter) => {
+                const isActive = activeFilter === filter;
+                return (
+                  <button
+                    key={filter}
+                    onClick={() => setActiveFilter(filter)}
+                    className={`px-3.5 py-1.5 rounded-full whitespace-nowrap transition-all font-semibold ${
+                      isActive
+                        ? "bg-[#C96B4B] text-white shadow-sm"
+                        : "bg-[#EDE8DE] text-[#6F6A62] hover:text-[#171717] hover:bg-[#E5DFD4]"
+                    }`}
+                  >
+                    {filter}
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* Journals Cards Grid (Responsive 1-col on mobile, 2-col on md, 4-col on lg) */}
+          <section className="space-y-4 pb-20 md:pb-8">
+            <div className="flex items-center justify-between">
+              <h2 className="font-serif text-xl font-bold text-[#171717]">
+                My Journals
+              </h2>
+              <span className="text-xs font-semibold text-[#C96B4B] hover:underline cursor-pointer">
+                See all ({journals.length})
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {filteredJournals.map((journal) => (
+                <Link
+                  key={journal.id}
+                  href={`/studio?journalId=${journal.id}`}
+                  className="block bg-white rounded-2xl overflow-hidden border border-[#DBD2C7] shadow-sm hover:shadow-md transition-all group"
+                >
+                  {/* Photo Banner with Stamp Badge */}
+                  <div className="relative h-48 w-full overflow-hidden bg-[#EDE8DE]">
+                    <Image
+                      src={journal.coverImage}
+                      alt={journal.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+
+                    {/* Postal / Date Stamp Tag */}
+                    <div className="absolute top-3 left-3 bg-[#F7F4EE]/90 backdrop-blur-sm border border-[#C96B4B]/40 rounded-lg px-2.5 py-1 text-[10px] font-semibold text-[#171717] shadow-sm flex items-center gap-1.5">
+                      <Calendar className="w-3 h-3 text-[#C96B4B]" />
+                      {journal.date}
+                    </div>
+
+                    {/* Location Tag */}
+                    <div className="absolute bottom-3 left-3 text-white flex items-center gap-1.5 text-xs font-medium drop-shadow">
+                      <MapPin className="w-3.5 h-3.5 text-[#C96B4B]" />
+                      {journal.location}
+                    </div>
+
+                    {/* Story Count Pill */}
+                    <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full">
+                      {journal.photosCount} photos · {journal.storiesCount} stories
+                    </div>
+                  </div>
+
+                  {/* Journal Details */}
+                  <div className="p-4 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-serif text-base font-bold text-[#171717] group-hover:text-[#C96B4B] transition-colors">
+                        {journal.title}
+                      </h3>
+                      <ArrowRight className="w-4 h-4 text-[#6F6A62] group-hover:text-[#C96B4B] group-hover:translate-x-0.5 transition-all" />
+                    </div>
+                    <p className="text-xs text-[#6F6A62] italic line-clamp-1">
+                      "{journal.featuredQuote}"
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        </main>
+      </div>
+
+      {/* Mobile-Only Bottom Navigation Dock */}
+      <div className="md:hidden">
+        <MobileNav />
+      </div>
+
+      {/* Creator Brain Persona Modal (FR-01) */}
+      <CreatorBrainModal
+        isOpen={isBrainModalOpen}
+        onClose={() => setIsBrainModalOpen(false)}
+        onProfileChange={(p) => setActiveProfile(p)}
+      />
     </div>
   );
 }

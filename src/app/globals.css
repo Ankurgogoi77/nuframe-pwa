@@ -1,26 +1,59 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* NuFrame Warm Editorial Light Palette */
+  --bg-editorial: #F7F4EE;
+  --surface-editorial: #EDE8DE;
+  --surface-card: #FFFFFF;
+  --border-editorial: #DBD2C7;
+  --text-primary: #171717;
+  --text-secondary: #6F6A62;
+  --terracotta: #C96B4B;
+  --terracotta-dark: #B85C43;
+  --olive: #60735A;
+  --gold: #C6A15B;
+  --burgundy: #651F2B;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Dark Creative Studio Palette */
+  --studio-bg: #141414;
+  --studio-surface: #20201E;
+  --studio-panel: #2A2926;
+  --studio-text: #F4F0E8;
+  --studio-muted: #9C9890;
+  --studio-accent: #D97855;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-editorial);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 9999px;
+}
+
+/* Postal Stamp & Polaroid Styling */
+.stamp-border {
+  border: 2px dashed #C96B4B;
+  background: #FDFBF7;
+}
+
+.polaroid-shadow {
+  box-shadow: 0 4px 20px -2px rgba(23, 23, 23, 0.08), 0 2px 6px -1px rgba(23, 23, 23, 0.04);
+}
+
+.studio-glow {
+  box-shadow: 0 0 25px rgba(217, 120, 85, 0.15);
 }

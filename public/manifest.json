@@ -1,12 +1,14 @@
 {
-  "name": "NuFrame Creator OS",
+  "name": "NuFrame | Creator OS",
   "short_name": "NuFrame",
-  "description": "Seamless Panoramic Carousels & Creator Command Center",
-  "start_url": "/dashboard",
+  "description": "Capture · Journal · Create · Share — Your moments, beautifully framed.",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#0a0a0a",
-  "theme_color": "#6366f1",
+  "orientation": "any",
+  "background_color": "#F7F4EE",
+  "theme_color": "#C96B4B",
+  "categories": ["photo", "productivity", "social"],
   "icons": [
     {
       "src": "/icon-192x192.png",
@@ -19,6 +21,29 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Creative Studio",
+      "short_name": "Studio",
+      "description": "Open seamless panoramic carousel studio",
+      "url": "/studio",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Trend Radar",
+      "short_name": "Trends",
+      "description": "View live creator trends and momentum",
+      "url": "/trends",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Creator Vault",
+      "short_name": "Vault",
+      "description": "Access your cloud media and drafts",
+      "url": "/dashboard",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
     }
   ]
 }

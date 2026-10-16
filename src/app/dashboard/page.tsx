@@ -73,8 +73,9 @@ function DashboardContent() {
   const fetchFiles = async (folderId: string) => {
     setIsLoading(true);
     setError(null);
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
     try {
-      const res = await fetch(`http://localhost:8000/api/vault/list?folder_id=${folderId}`, {
+      const res = await fetch(`${apiUrl}/api/vault/list?folder_id=${folderId}`, {
         headers: {
           "x-google-access-token": accessToken || ""
         }
@@ -99,8 +100,9 @@ function DashboardContent() {
   };
 
   const handleConnect = async () => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
     try {
-      const res = await fetch("http://localhost:8000/api/auth/google/login?frontend_redirect=http://localhost:3000/dashboard");
+      const res = await fetch(`${apiUrl}/api/auth/google/login?frontend_redirect=http://localhost:3000/dashboard`);
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
@@ -147,8 +149,9 @@ function DashboardContent() {
 
     setUploading(true);
     setError(null);
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
     try {
-      const res = await fetch(`http://localhost:8000/api/vault/upload?folder_id=${currentFolderId}${locationQuery}`, {
+      const res = await fetch(`${apiUrl}/api/vault/upload?folder_id=${currentFolderId}${locationQuery}`, {
         method: "POST",
         headers: {
           "x-google-access-token": accessToken || ""
@@ -379,7 +382,7 @@ function DashboardContent() {
                         {/* Inline download action for images */}
                         {!isFolder && isImage && (
                           <a
-                            href={`http://localhost:8000/api/vault/download/${file.id}?x-google-access-token=${accessToken}`}
+                            href={`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001"}/api/vault/download/${file.id}?x-google-access-token=${accessToken}`}
                             download
                             className="opacity-0 group-hover:opacity-100 p-1.5 bg-indigo-600/25 border border-indigo-500/30 rounded-lg text-indigo-400 hover:bg-indigo-600 hover:text-white transition-all"
                             onClick={(e) => e.stopPropagation()}

@@ -1,31 +1,40 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import PWARegister from "@/components/PWARegister";
+import InstallPrompt from "@/components/InstallPrompt";
+import TutorialTour from "@/components/TutorialTour";
+import Chatbot from "@/components/Chatbot";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const playfair = Playfair_Display({
   subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "NuFrame | Creator OS",
-  description: "Seamless Panoramic Carousels & Creator Command Center",
+  description: "Capture · Journal · Create · Share — Your moments, beautifully framed.",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/icon-192x192.png",
+    apple: "/icon-192x192.png",
+  },
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
     title: "NuFrame",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#6366f1",
+  themeColor: "#C96B4B",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -40,10 +49,17 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${jakarta.variable} ${playfair.variable} h-full`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-[#0a0a0a] text-gray-100">
+      <body
+        className="min-h-full font-sans antialiased bg-[#F7F4EE] text-[#171717] selection:bg-[#C96B4B] selection:text-white"
+        suppressHydrationWarning
+      >
         <PWARegister />
+        <InstallPrompt />
+        <TutorialTour />
+        <Chatbot />
         {children}
       </body>
     </html>
