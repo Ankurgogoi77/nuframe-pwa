@@ -21,6 +21,7 @@ import {
   Layers,
   Eye,
   Bookmark,
+  Globe,
 } from "lucide-react";
 
 export default function AnalyticsPage() {
@@ -50,6 +51,67 @@ export default function AnalyticsPage() {
   const [activeAccountHandle, setActiveAccountHandle] = useState<string>("");
   const [isSandboxMode, setIsSandboxMode] = useState<boolean>(false);
   const [isConnectingPlatform, setIsConnectingPlatform] = useState<string | null>(null);
+
+  const renderSocialIcon = (id: string, className = "w-4 h-4") => {
+    switch (id) {
+      case "instagram":
+        return (
+          <svg className={className} viewBox="0 0 24 24" fill="none">
+            <rect x="2" y="2" width="20" height="20" rx="5" fill="url(#ig-grad)" />
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" stroke="#fff" strokeWidth="1.75" />
+            <circle cx="17.5" cy="6.5" r="1.2" fill="#fff" />
+            <defs>
+              <radialGradient id="ig-grad" cx="0.3" cy="1" r="1">
+                <stop offset="0%" stopColor="#fdf497" />
+                <stop offset="5%" stopColor="#fdf497" />
+                <stop offset="45%" stopColor="#fd5949" />
+                <stop offset="60%" stopColor="#d6249f" />
+                <stop offset="90%" stopColor="#285AEB" />
+              </radialGradient>
+            </defs>
+          </svg>
+        );
+      case "facebook":
+        return (
+          <svg className={className} viewBox="0 0 24 24" fill="#1877F2">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+          </svg>
+        );
+      case "linkedin":
+        return (
+          <svg className={className} viewBox="0 0 24 24" fill="#0A66C2">
+            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+          </svg>
+        );
+      case "x":
+        return (
+          <svg className={className} viewBox="0 0 24 24" fill="#000000">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+          </svg>
+        );
+      case "tiktok":
+        return (
+          <svg className={className} viewBox="0 0 24 24" fill="#000000">
+            <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
+          </svg>
+        );
+      case "snapchat":
+        return (
+          <svg className={className} viewBox="0 0 24 24">
+            <rect width="24" height="24" rx="5" fill="#FFFC00" />
+            <path fill="#000" d="M12.003 3.5c-3.1 0-5.2 2.3-5.2 5.3 0 .6.2 1.7.5 2.3.1.2-.1.4-.3.5-.4.3-1.2.8-1.5 1.8-.2.6.2 1.1.7 1.3.7.2 1.3.1 1.9-.2.2-.1.4 0 .4.2.2.8 1 1.7 2.1 1.9.3 0 .5.2.5.5 0 .2-.1.4-.4.5-.7.4-1.8.7-2.6 1.5-.4.4-.6 1-.1 1.4.6.4 1.7.4 2.8.1 1-.3 1.7-.7 2.1-.7.4 0 1.2.4 2.1.7 1 .3 2.1.3 2.8-.1.5-.4.3-1-.1-1.4-.8-.8-1.9-1.1-2.6-1.5-.3-.1-.4-.3-.4-.5 0-.3.2-.5.5-.5 1.1-.2 1.9-1.1 2.1-1.9.1-.2.2-.3.4-.2.5.3 1.2.4 1.9.2.5-.2.9-.7.7-1.3-.3-1-1.1-1.5-1.5-1.8-.2-.1-.4-.3-.3-.5.3-.6.5-1.7.5-2.3C17.2 5.8 15.1 3.5 12.003 3.5z" />
+          </svg>
+        );
+      case "youtube":
+        return (
+          <svg className={className} viewBox="0 0 24 24" fill="#FF0000">
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+          </svg>
+        );
+      default:
+        return <Globe className={className} />;
+    }
+  };
 
   const socialPlatforms = [
     {
@@ -272,25 +334,53 @@ export default function AnalyticsPage() {
                     </button>
                   </div>
 
-                  {/* 7 Official Platform Cards Grid */}
+                  {/* Quick-Connect Dropdown Selector */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#EDE8DE]/70 p-3 rounded-xl border border-[#DBD2C7]">
+                    <div className="flex items-center gap-2">
+                      <Globe className="w-4 h-4 text-[#C96B4B]" />
+                      <span className="text-xs font-bold text-[#171717]">Quick Connect Dropdown:</span>
+                      <span className="text-[11px] text-[#6F6A62]">Select a channel to initiate OAuth 2.0 handshake</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <select
+                        onChange={(e) => {
+                          if (e.target.value) {
+                            handleConnect(e.target.value, false);
+                            e.target.value = "";
+                          }
+                        }}
+                        className="bg-white border border-[#DBD2C7] rounded-lg px-3 py-1.5 text-xs font-semibold text-[#171717] focus:outline-none focus:ring-1 focus:ring-[#C96B4B] cursor-pointer shadow-sm"
+                        defaultValue=""
+                      >
+                        <option value="" disabled>Choose Platform to Connect...</option>
+                        {socialPlatforms.map((p) => (
+                          <option key={p.id} value={p.id} disabled={connectedPlatforms.includes(p.id)}>
+                            {p.name} ({p.category}) {connectedPlatforms.includes(p.id) ? "— Connected" : ""}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* 7 Official Platform Cards Grid with Logos */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
                     {socialPlatforms.map((platform) => {
                       const isConnecting = isConnectingPlatform === platform.id;
+                      const isConnected = connectedPlatforms.includes(platform.id);
                       return (
                         <div
                           key={platform.id}
-                          className="p-3.5 rounded-xl border border-[#DBD2C7] bg-[#FDFCFB] hover:border-[#C96B4B]/60 transition-all flex flex-col justify-between space-y-2.5"
+                          className="p-4 rounded-xl border border-[#DBD2C7] bg-[#FDFCFB] hover:border-[#C96B4B]/60 transition-all flex flex-col justify-between space-y-3 shadow-xs"
                         >
-                          <div className="space-y-1">
+                          <div className="space-y-1.5">
                             <div className="flex items-center justify-between">
-                              <span className="font-bold text-xs text-[#171717] flex items-center gap-1.5">
-                                <span
-                                  className="w-2.5 h-2.5 rounded-full"
-                                  style={{ backgroundColor: platform.color }}
-                                />
-                                {platform.name}
+                              <span className="font-bold text-xs text-[#171717] flex items-center gap-2">
+                                <span className="p-1.5 rounded-lg bg-white border border-[#DBD2C7]/60 shadow-xs flex items-center justify-center">
+                                  {renderSocialIcon(platform.id, "w-4 h-4")}
+                                </span>
+                                <span>{platform.name}</span>
                               </span>
-                              <span className="text-[10px] text-[#6F6A62] bg-[#EDE8DE] px-2 py-0.5 rounded-full">
+                              <span className="text-[10px] text-[#6F6A62] bg-[#EDE8DE] px-2 py-0.5 rounded-full font-medium">
                                 {platform.category}
                               </span>
                             </div>
@@ -304,13 +394,20 @@ export default function AnalyticsPage() {
 
                           <button
                             onClick={() => handleConnect(platform.id, false)}
-                            disabled={isConnecting}
-                            className="w-full bg-[#EDE8DE] hover:bg-[#C96B4B] hover:text-white text-[#171717] text-xs font-semibold py-1.5 rounded-lg transition-all border border-[#DBD2C7] flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
+                            disabled={isConnecting || isConnected}
+                            className={`w-full text-xs font-semibold py-2 rounded-lg transition-all border flex items-center justify-center gap-2 active:scale-95 cursor-pointer shadow-xs ${
+                              isConnected
+                                ? "bg-[#EAF0E6] text-[#60735A] border-[#60735A]/30 cursor-default"
+                                : "bg-white hover:bg-[#C96B4B] hover:text-white text-[#171717] border-[#DBD2C7]"
+                            }`}
                           >
+                            {renderSocialIcon(platform.id, "w-3.5 h-3.5")}
                             {isConnecting ? (
                               <span>Authenticating...</span>
+                            ) : isConnected ? (
+                              <span>✓ Connected (Read-Only)</span>
                             ) : (
-                              <span>Connect & Grant Read Access</span>
+                              <span>Connect {platform.name}</span>
                             )}
                           </button>
                         </div>
@@ -335,20 +432,21 @@ export default function AnalyticsPage() {
             ) : (
               /* CONNECTED CHANNELS STREAMING LIVE DATA */
               <div className="space-y-6">
-                {/* Active Connected Channel Banner */}
+                {/* Active Connected Channel Banner with Official Logos */}
                 <div className="bg-[#EAF0E6] border border-[#60735A]/30 rounded-2xl p-3.5 flex items-center justify-between flex-wrap gap-2">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-[#60735A] animate-pulse" />
                     <span className="text-xs font-bold text-[#171717]">
                       Streaming Live Metrics from:
                     </span>
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 flex-wrap">
                       {connectedPlatforms.map((pid) => (
                         <span
                           key={pid}
-                          className="text-[11px] font-semibold bg-white text-[#171717] px-2.5 py-0.5 rounded-full border border-[#60735A]/30 capitalize flex items-center gap-1"
+                          className="text-[11px] font-semibold bg-white text-[#171717] px-2.5 py-1 rounded-full border border-[#60735A]/30 capitalize flex items-center gap-1.5 shadow-xs"
                         >
-                          {pid} {isSandboxMode ? "(@ananya.travels)" : activeAccountHandle}
+                          {renderSocialIcon(pid, "w-3.5 h-3.5")}
+                          <span>{pid} {isSandboxMode ? "(@ananya.travels)" : activeAccountHandle}</span>
                         </span>
                       ))}
                     </div>
