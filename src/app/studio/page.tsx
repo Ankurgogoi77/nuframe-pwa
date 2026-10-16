@@ -23,11 +23,15 @@ import {
   Eye,
   Settings2,
   ZoomIn,
+  ZoomOut,
   Share2,
   MapPin,
+  Move,
+  Smartphone,
 } from "lucide-react";
 import RepurposeDrawer from "@/components/RepurposeDrawer";
 import GoogleMapsModal, { LocationData } from "@/components/GoogleMapsModal";
+import CarouselSimulatorModal from "@/components/CarouselSimulatorModal";
 
 export default function CreativeStudioPage() {
   const [aspectRatio, setAspectRatio] = useState<"4:5" | "1:1">("4:5");
@@ -36,6 +40,15 @@ export default function CreativeStudioPage() {
   const [isAutoDirecting, setIsAutoDirecting] = useState<boolean>(false);
   const [isRepurposing, setIsRepurposing] = useState<boolean>(false);
   const [isMapModalOpen, setIsMapModalOpen] = useState<boolean>(false);
+  const [isSimulatorOpen, setIsSimulatorOpen] = useState<boolean>(false);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  
+  // Pointer / Touch Coordinate Tracking (Pan & Zoom)
+  const [pan, setPan] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState<number>(1.0);
+  const [isPanning, setIsPanning] = useState<boolean>(false);
+  const [startPoint, setStartPoint] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+
   const [activeLeftTool, setActiveLeftTool] = useState<string>("Layout");
   const [activeRightTab, setActiveRightTab] = useState<"Text" | "Style" | "Elements" | "Adjust">("Text");
 
@@ -61,6 +74,61 @@ export default function CreativeStudioPage() {
       const objectUrl = URL.createObjectURL(file);
       setCurrentImage(objectUrl);
     }
+  };
+
+  // Drag and Drop Zone Handlers
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      setSelectedFile(file);
+      const objectUrl = URL.createObjectURL(file);
+      setCurrentImage(objectUrl);
+      setExportSuccessMessage(`Loaded photo: ${file.name}`);
+      setTimeout(() => setExportSuccessMessage(null), 3000);
+    }
+  };
+
+  // Pointer & Touch Coordinate Tracking (Pan & Zoom)
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (e.button !== 0 && e.pointerType === "mouse") return;
+    setIsPanning(true);
+    setStartPoint({ x: e.clientX - pan.x, y: e.clientY - pan.y });
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isPanning) return;
+    setPan({
+      x: e.clientX - startPoint.x,
+      y: e.clientY - startPoint.y,
+    });
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    setIsPanning(false);
+  };
+
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    const delta = -e.deltaY * 0.001;
+    setZoom((prev) => Math.min(Math.max(0.7, prev + delta), 3.0));
+  };
+
+  const handleResetTransform = () => {
+    setPan({ x: 0, y: 0 });
+    setZoom(1.0);
   };
 
   const handleLocationSelected = (location: LocationData) => {
@@ -240,14 +308,46 @@ export default function CreativeStudioPage() {
             </button>
           </div>
 
-          <div className="hidden lg:flex items-center gap-1.5 bg-[#20201E] border border-[#2A2926] px-3 py-1 rounded-full text-xs text-[#9C9890]">
-            <ZoomIn className="w-3.5 h-3.5" />
-            <span>100%</span>
+          <div className="hidden lg:flex items-center gap-1.5 bg-[#20201E] border border-[#2A2926] px-2 py-1 rounded-full text-xs text-[#9C9890]">
+            <button
+              onClick={() => setZoom((z) => Math.max(0.7, z - 0.1))}
+              className="hover:text-white px-1 font-bold"
+              title="Zoom Out"
+            >
+              -
+            </button>
+            <span className="font-mono text-[11px] min-w-[36px] text-center text-white">
+              {Math.round(zoom * 100)}%
+            </span>
+            <button
+              onClick={() => setZoom((z) => Math.min(3.0, z + 0.1))}
+              className="hover:text-white px-1 font-bold"
+              title="Zoom In"
+            >
+              +
+            </button>
+            <button
+              onClick={handleResetTransform}
+              className="text-[10px] text-[#D97855] hover:underline ml-1"
+              title="Reset Zoom & Pan"
+            >
+              Reset
+            </button>
           </div>
         </div>
 
-        {/* Right CTA: Repurpose & Export Buttons */}
+        {/* Right CTA: Repurpose, Simulator & Export Buttons */}
         <div className="flex items-center gap-2">
+          {/* Swipe-Test Simulator Button */}
+          <button
+            onClick={() => setIsSimulatorOpen(true)}
+            className="inline-flex items-center gap-1.5 bg-[#20201E] hover:bg-[#2A2926] text-[#F4F0E8] border border-[#3A3833] text-xs font-semibold px-3 py-2 rounded-full active:scale-95 transition-all shadow-sm cursor-pointer"
+            title="Open CSS Carousel Track Simulator (Swipe-Test)"
+          >
+            <Smartphone className="w-3.5 h-3.5 text-[#D97855]" />
+            <span className="hidden sm:inline">Swipe-Test</span>
+          </button>
+
           {/* Google Maps Location Tagger Button */}
           <button
             onClick={() => setIsMapModalOpen(true)}
@@ -351,48 +451,79 @@ export default function CreativeStudioPage() {
             </button>
           </div>
 
-          {/* Canvas Viewport Frame */}
+          {/* Canvas Viewport Frame with Drag-Drop & Pointer Pan/Zoom */}
           <div
-            className={`relative w-full max-w-md rounded-2xl overflow-hidden bg-[#20201E] border-2 border-[#2A2926] shadow-2xl transition-all duration-300 ${
-              aspectRatio === "4:5" ? "aspect-[4/5]" : "aspect-square"
-            }`}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={`relative w-full max-w-md rounded-2xl overflow-hidden bg-[#20201E] border-2 shadow-2xl transition-all duration-300 ${
+              isDragging ? "border-[#D97855] ring-4 ring-[#D97855]/30" : "border-[#2A2926]"
+            } ${aspectRatio === "4:5" ? "aspect-[4/5]" : "aspect-square"}`}
           >
-            {/* Background Panorama Image */}
-            <div className="relative w-full h-full overflow-hidden">
-              <Image
-                src={currentImage}
-                alt="Studio Panorama"
-                fill
-                className="object-cover"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30" />
+            {/* Drag-and-Drop Active Overlay */}
+            {isDragging && (
+              <div className="absolute inset-0 z-40 bg-[#141414]/90 backdrop-blur-xs flex flex-col items-center justify-center border-2 border-dashed border-[#D97855] text-white p-4">
+                <Upload className="w-10 h-10 text-[#D97855] animate-bounce mb-2" />
+                <p className="font-serif font-bold text-sm">Drop panorama photo here</p>
+                <p className="text-xs text-[#9C9890] mt-1">Automatic seamless framing</p>
+              </div>
+            )}
 
-              {/* Vertical Dashed Cut Guides (Seamless Panorama Slices) */}
-              <div className="absolute inset-0 pointer-events-none grid grid-cols-3">
-                <div className="border-r border-dashed border-white/40 relative">
-                  <span className="absolute top-2 left-2 bg-black/60 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
-                    Slide 1
-                  </span>
-                </div>
-                <div className="border-r border-dashed border-white/40 relative">
-                  <span className="absolute top-2 left-2 bg-black/60 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
-                    Slide 2
-                  </span>
-                </div>
-                <div className="relative">
-                  <span className="absolute top-2 left-2 bg-black/60 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
-                    Slide 3
-                  </span>
-                </div>
+            {/* Interactive Image Container with Pointer/Touch Pan & Zoom */}
+            <div
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onWheel={handleWheel}
+              style={{ cursor: isPanning ? "grabbing" : "grab", touchAction: "none" }}
+              className="relative w-full h-full overflow-hidden select-none"
+            >
+              <div
+                className="w-full h-full transition-transform duration-75"
+                style={{
+                  transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+                  transformOrigin: "center center",
+                }}
+              >
+                <Image
+                  src={currentImage}
+                  alt="Studio Panorama"
+                  fill
+                  className="object-cover pointer-events-none"
+                  priority
+                />
+              </div>
+
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30 pointer-events-none" />
+
+              {/* Dynamic Vertical Dashed Cut Guides (Calculated based on slideCount) */}
+              <div
+                className="absolute inset-0 pointer-events-none grid"
+                style={{ gridTemplateColumns: `repeat(${slideCount}, minmax(0, 1fr))` }}
+              >
+                {[...Array(slideCount)].map((_, i) => (
+                  <div
+                    key={i}
+                    className={`relative ${
+                      i < slideCount - 1 ? "border-r-2 border-dashed border-white/50" : ""
+                    }`}
+                  >
+                    <span className="absolute top-2 left-2 bg-black/70 backdrop-blur-xs text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
+                      Slide {i + 1}
+                    </span>
+                  </div>
+                ))}
               </div>
 
               {/* Postal Stamp Badge - Interactive with Google Maps */}
               <button
                 type="button"
-                onClick={() => setIsMapModalOpen(true)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsMapModalOpen(true);
+                }}
                 title="Click to change location on Google Maps"
-                className="absolute top-8 right-6 bg-[#F7F4EE]/95 border-2 border-dashed border-[#C96B4B] text-[#171717] px-2.5 py-1 rounded shadow-lg transform rotate-2 hover:scale-105 transition-all cursor-pointer group/stamp"
+                className="absolute top-8 right-6 bg-[#F7F4EE]/95 border-2 border-dashed border-[#C96B4B] text-[#171717] px-2.5 py-1 rounded shadow-lg transform rotate-2 hover:scale-105 transition-all cursor-pointer group/stamp pointer-events-auto"
               >
                 <div className="flex items-center gap-1 text-[9px] font-extrabold tracking-wider uppercase">
                   <MapPin className="w-2.5 h-2.5 text-[#EA4335] group-hover/stamp:scale-110 transition-transform" />
@@ -401,14 +532,14 @@ export default function CreativeStudioPage() {
               </button>
 
               {/* Curved / Editorial Headline */}
-              <div className="absolute top-20 left-6 right-6 text-center">
+              <div className="absolute top-20 left-6 right-6 text-center pointer-events-none">
                 <h2 className="font-serif text-3xl font-extrabold text-[#F7F4EE] tracking-widest drop-shadow-md">
                   {canvasTitle}
                 </h2>
               </div>
 
               {/* Polaroid / Handwritten Caption */}
-              <div className="absolute bottom-6 left-6 right-6 bg-[#F7F4EE]/90 backdrop-blur-sm text-[#171717] p-3 rounded-xl border border-[#DBD2C7] shadow-lg">
+              <div className="absolute bottom-6 left-6 right-6 bg-[#F7F4EE]/90 backdrop-blur-sm text-[#171717] p-3 rounded-xl border border-[#DBD2C7] shadow-lg pointer-events-none">
                 <p className="font-sans text-xs italic text-[#171717] leading-relaxed">
                   "{captionText}"
                 </p>
@@ -419,34 +550,57 @@ export default function CreativeStudioPage() {
                   </span>
                 </div>
               </div>
+
+              {/* Coordinates & Pan/Zoom Indicator Badge */}
+              <div className="absolute bottom-2 left-2 bg-black/70 backdrop-blur-xs text-[9px] text-[#9C9890] font-mono px-2 py-0.5 rounded-md pointer-events-none flex items-center gap-1.5">
+                <Move className="w-2.5 h-2.5 text-[#D97855]" />
+                <span>Drag to pan · Scroll to zoom</span>
+              </div>
             </div>
           </div>
 
           {/* Slide Navigation & Photo Upload Trigger */}
           <div className="w-full max-w-md flex items-center justify-between mt-3 px-1 text-xs">
-            <div className="flex items-center gap-2">
-              {[1, 2, 3].map((num) => (
+            {/* Dynamic Slide Number Selector */}
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] text-[#9C9890] mr-1 hidden sm:inline">Slices:</span>
+              {[2, 3, 4, 5].map((num) => (
                 <button
                   key={num}
-                  onClick={() => setActiveSlide(num)}
-                  className={`w-7 h-7 rounded-full text-xs font-bold transition-all ${
-                    activeSlide === num
+                  onClick={() => {
+                    setSlideCount(num);
+                    if (activeSlide > num) setActiveSlide(num);
+                  }}
+                  className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
+                    slideCount === num
                       ? "bg-[#D97855] text-white ring-2 ring-[#D97855]/40"
                       : "bg-[#20201E] text-[#9C9890] hover:text-[#F4F0E8]"
                   }`}
+                  title={`${num} seamless panorama slides`}
                 >
-                  {num}
+                  {num}P
                 </button>
               ))}
             </div>
 
-            <label
-              onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-1 text-[#D97855] hover:text-white cursor-pointer font-semibold text-xs"
-            >
-              <Upload className="w-3.5 h-3.5" />
-              Replace Photo
-            </label>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setIsSimulatorOpen(true)}
+                className="text-[#D97855] hover:text-white font-semibold text-xs flex items-center gap-1 cursor-pointer"
+              >
+                <Smartphone className="w-3.5 h-3.5" />
+                <span>Swipe Test</span>
+              </button>
+
+              <label
+                onClick={() => fileInputRef.current?.click()}
+                className="flex items-center gap-1 text-[#9C9890] hover:text-white cursor-pointer font-semibold text-xs"
+              >
+                <Upload className="w-3.5 h-3.5" />
+                Upload Photo
+              </label>
+            </div>
             <input
               ref={fileInputRef}
               type="file"
@@ -565,6 +719,21 @@ export default function CreativeStudioPage() {
         onClose={() => setIsMapModalOpen(false)}
         onSelectLocation={handleLocationSelected}
         initialQuery="Pondicherry, India"
+      />
+
+      {/* Carousel Track Simulator Modal (Swipe-Test) */}
+      <CarouselSimulatorModal
+        isOpen={isSimulatorOpen}
+        onClose={() => setIsSimulatorOpen(false)}
+        imageUrl={currentImage}
+        slideCount={slideCount}
+        aspectRatio={aspectRatio}
+        title={canvasTitle}
+        caption={captionText}
+        stampText={stampText}
+        curvedText={curvedText}
+        pan={pan}
+        zoom={zoom}
       />
     </div>
   );
