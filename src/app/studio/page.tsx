@@ -24,8 +24,10 @@ import {
   Settings2,
   ZoomIn,
   Share2,
+  MapPin,
 } from "lucide-react";
 import RepurposeDrawer from "@/components/RepurposeDrawer";
+import GoogleMapsModal, { LocationData } from "@/components/GoogleMapsModal";
 
 export default function CreativeStudioPage() {
   const [aspectRatio, setAspectRatio] = useState<"4:5" | "1:1">("4:5");
@@ -33,6 +35,7 @@ export default function CreativeStudioPage() {
   const [activeSlide, setActiveSlide] = useState<number>(1);
   const [isAutoDirecting, setIsAutoDirecting] = useState<boolean>(false);
   const [isRepurposing, setIsRepurposing] = useState<boolean>(false);
+  const [isMapModalOpen, setIsMapModalOpen] = useState<boolean>(false);
   const [activeLeftTool, setActiveLeftTool] = useState<string>("Layout");
   const [activeRightTab, setActiveRightTab] = useState<"Text" | "Style" | "Elements" | "Adjust">("Text");
 
@@ -58,6 +61,19 @@ export default function CreativeStudioPage() {
       const objectUrl = URL.createObjectURL(file);
       setCurrentImage(objectUrl);
     }
+  };
+
+  const handleLocationSelected = (location: LocationData) => {
+    const locName = location.name.toUpperCase();
+    const city = (location.location_badge || location.name).toUpperCase();
+    setCanvasTitle(locName.slice(0, 20));
+    if (location.latitude && location.longitude) {
+      setStampText(`2026 · ${city} · ${location.latitude.toFixed(2)}°, ${location.longitude.toFixed(2)}°`);
+    } else {
+      setStampText(`2026 · ${city}`);
+    }
+    setExportSuccessMessage(`Tagged: ${location.location_badge} via Google Maps!`);
+    setTimeout(() => setExportSuccessMessage(null), 3000);
   };
 
   const handleAutoDirect = async () => {
@@ -232,6 +248,16 @@ export default function CreativeStudioPage() {
 
         {/* Right CTA: Repurpose & Export Buttons */}
         <div className="flex items-center gap-2">
+          {/* Google Maps Location Tagger Button */}
+          <button
+            onClick={() => setIsMapModalOpen(true)}
+            className="hidden sm:inline-flex items-center gap-1.5 bg-[#20201E] hover:bg-[#2A2926] text-[#F4F0E8] border border-[#3A3833] text-xs font-semibold px-3 py-2 rounded-full active:scale-95 transition-all shadow-sm cursor-pointer"
+            title="Search Google Maps to tag location badge"
+          >
+            <MapPin className="w-3.5 h-3.5 text-[#EA4335]" />
+            <span>Maps</span>
+          </button>
+
           <button
             onClick={() => setIsRepurposing(true)}
             className="bg-[#20201E] hover:bg-[#2A2926] text-[#F4F0E8] border border-[#3A3833] text-xs font-semibold px-3.5 py-2 rounded-full flex items-center gap-1.5 active:scale-95 transition-all shadow-sm"
@@ -361,13 +387,18 @@ export default function CreativeStudioPage() {
                 </div>
               </div>
 
-              {/* Postal Stamp Badge */}
-              <div className="absolute top-8 right-6 bg-[#F7F4EE]/95 border-2 border-dashed border-[#C96B4B] text-[#171717] px-2.5 py-1 rounded shadow-lg transform rotate-2">
+              {/* Postal Stamp Badge - Interactive with Google Maps */}
+              <button
+                type="button"
+                onClick={() => setIsMapModalOpen(true)}
+                title="Click to change location on Google Maps"
+                className="absolute top-8 right-6 bg-[#F7F4EE]/95 border-2 border-dashed border-[#C96B4B] text-[#171717] px-2.5 py-1 rounded shadow-lg transform rotate-2 hover:scale-105 transition-all cursor-pointer group/stamp"
+              >
                 <div className="flex items-center gap-1 text-[9px] font-extrabold tracking-wider uppercase">
-                  <Stamp className="w-2.5 h-2.5 text-[#C96B4B]" />
-                  {stampText}
+                  <MapPin className="w-2.5 h-2.5 text-[#EA4335] group-hover/stamp:scale-110 transition-transform" />
+                  <span>{stampText}</span>
                 </div>
-              </div>
+              </button>
 
               {/* Curved / Editorial Headline */}
               <div className="absolute top-20 left-6 right-6 text-center">
@@ -456,6 +487,15 @@ export default function CreativeStudioPage() {
               + Add Title Text
             </button>
 
+            {/* Google Maps Location Button */}
+            <button
+              onClick={() => setIsMapModalOpen(true)}
+              className="w-full bg-[#141414] border border-[#EA4335]/40 hover:border-[#EA4335] text-white font-medium py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs"
+            >
+              <MapPin className="w-3.5 h-3.5 text-[#EA4335]" />
+              <span>Tag Location via Google Maps</span>
+            </button>
+
             <div className="grid grid-cols-2 gap-2 text-xs">
               <button
                 onClick={() => setCanvasTitle("SUMMER ESCAPE")}
@@ -518,6 +558,14 @@ export default function CreativeStudioPage() {
       <div className="md:hidden">
         <MobileNav />
       </div>
+
+      {/* Google Maps Location Picker Modal */}
+      <GoogleMapsModal
+        isOpen={isMapModalOpen}
+        onClose={() => setIsMapModalOpen(false)}
+        onSelectLocation={handleLocationSelected}
+        initialQuery="Pondicherry, India"
+      />
     </div>
   );
 }

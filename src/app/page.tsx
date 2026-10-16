@@ -29,12 +29,15 @@ import {
 } from "lucide-react";
 import CreatorBrainModal, { PRESET_PROFILES, CreatorProfileData } from "@/components/CreatorBrainModal";
 import GoogleAuthModal from "@/components/GoogleAuthModal";
+import GoogleMapsModal from "@/components/GoogleMapsModal";
 
 export default function NuFrameApp() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [isBrainModalOpen, setIsBrainModalOpen] = useState(false);
   const [isGoogleModalOpen, setIsGoogleModalOpen] = useState(false);
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
+  const [selectedMapLocation, setSelectedMapLocation] = useState("Pondicherry, India");
   const [activeProfile, setActiveProfile] = useState<CreatorProfileData>(PRESET_PROFILES.ananya);
   const [rawIdea, setRawIdea] = useState("");
 
@@ -356,6 +359,20 @@ export default function NuFrameApp() {
               <span>Continue with Google</span>
             </button>
 
+            {/* Google Maps Location Explorer CTA */}
+            <button
+              onClick={() => {
+                setSelectedMapLocation("Pondicherry, India");
+                setIsMapModalOpen(true);
+              }}
+              className="inline-flex items-center gap-1.5 bg-[#EDE8DE] hover:bg-[#E5DFD4] text-[#171717] text-xs font-semibold px-3 py-2 rounded-full border border-[#DBD2C7] transition-all cursor-pointer shadow-2xs active:scale-95"
+              aria-label="Google Maps Location Explorer"
+              title="Explore Creator Hotspots on Google Maps"
+            >
+              <MapPin className="w-3.5 h-3.5 text-[#EA4335]" />
+              <span>Google Maps</span>
+            </button>
+
             {/* "Take Tour" Interactive Guide CTA */}
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("start-nuframe-tour"))}
@@ -583,11 +600,20 @@ export default function NuFrameApp() {
                       {journal.date}
                     </div>
 
-                    {/* Location Tag */}
-                    <div className="absolute bottom-3 left-3 text-white flex items-center gap-1.5 text-xs font-medium drop-shadow">
-                      <MapPin className="w-3.5 h-3.5 text-[#C96B4B]" />
-                      {journal.location}
-                    </div>
+                    {/* Location Tag - Clickable to Google Maps */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedMapLocation(journal.location);
+                        setIsMapModalOpen(true);
+                      }}
+                      className="absolute bottom-3 left-3 text-white flex items-center gap-1.5 text-xs font-medium drop-shadow bg-black/40 hover:bg-black/70 px-2.5 py-1 rounded-full backdrop-blur-xs transition-all cursor-pointer group/loc border border-white/10"
+                      title="View on Google Maps"
+                    >
+                      <MapPin className="w-3.5 h-3.5 text-[#EA4335] group-hover/loc:scale-110 transition-transform" />
+                      <span>{journal.location}</span>
+                    </button>
 
                     {/* Story Count Pill */}
                     <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full">
@@ -634,6 +660,13 @@ export default function NuFrameApp() {
           name: activeProfile.name,
           email: `${activeProfile.name.toLowerCase().replace(" ", ".")}@gmail.com`
         }}
+      />
+
+      {/* Google Maps Location Explorer & Tagger Modal */}
+      <GoogleMapsModal
+        isOpen={isMapModalOpen}
+        onClose={() => setIsMapModalOpen(false)}
+        initialQuery={selectedMapLocation}
       />
     </div>
   );

@@ -4,6 +4,8 @@ import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { MapPin } from "lucide-react";
+import GoogleMapsModal from "@/components/GoogleMapsModal";
 
 interface GFile {
   id: string;
@@ -33,6 +35,8 @@ function DashboardContent() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
+  const [isMapModalOpen, setIsMapModalOpen] = useState<boolean>(false);
+  const [mapQuery, setMapQuery] = useState<string>("Hyderabad, India");
 
   // Check URL parameters for tokens, save to localStorage, and clear URL
   useEffect(() => {
@@ -299,6 +303,20 @@ function DashboardContent() {
                     accept="image/*"
                   />
                 </label>
+
+                {/* Google Maps Location Explorer */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMapQuery("Hyderabad, India");
+                    setIsMapModalOpen(true);
+                  }}
+                  className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-gray-300 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
+                  title="Explore photo spots on Google Maps"
+                >
+                  <MapPin className="w-4 h-4 text-[#EA4335]" />
+                  <span className="hidden sm:inline">Google Maps</span>
+                </button>
                 
                 <Link
                   href="/studio"
@@ -404,12 +422,19 @@ function DashboardContent() {
                             {isFolder ? "Folder" : formatSize(file.size)}
                           </p>
                           {file.appProperties?.location && (
-                            <span 
-                              className="text-[10px] text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 rounded px-1.5 py-0.5 max-w-[90px] truncate"
-                              title={file.appProperties.location}
+                            <button 
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setMapQuery(file.appProperties?.location || "");
+                                setIsMapModalOpen(true);
+                              }}
+                              className="text-[10px] text-indigo-400 hover:text-white bg-indigo-500/10 hover:bg-indigo-500/30 border border-indigo-500/20 rounded px-1.5 py-0.5 max-w-[110px] truncate transition-colors cursor-pointer flex items-center gap-1"
+                              title={`View ${file.appProperties.location} on Google Maps`}
                             >
-                              📍 {file.appProperties.location.split(',')[0]}
-                            </span>
+                              <span>📍</span>
+                              <span className="truncate">{file.appProperties.location.split(',')[0]}</span>
+                            </button>
                           )}
                         </div>
                       </div>
@@ -421,6 +446,13 @@ function DashboardContent() {
           </div>
         )}
       </main>
+
+      {/* Google Maps Location Explorer Modal */}
+      <GoogleMapsModal
+        isOpen={isMapModalOpen}
+        onClose={() => setIsMapModalOpen(false)}
+        initialQuery={mapQuery}
+      />
     </div>
   );
 }
