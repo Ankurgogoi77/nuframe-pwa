@@ -28,10 +28,12 @@ import {
   MapPin,
   Move,
   Smartphone,
+  Calendar,
 } from "lucide-react";
 import RepurposeDrawer from "@/components/RepurposeDrawer";
 import GoogleMapsModal, { LocationData } from "@/components/GoogleMapsModal";
 import CarouselSimulatorModal from "@/components/CarouselSimulatorModal";
+import ScheduleModal from "@/components/ScheduleModal";
 
 export default function CreativeStudioPage() {
   const [aspectRatio, setAspectRatio] = useState<"4:5" | "1:1">("4:5");
@@ -41,6 +43,7 @@ export default function CreativeStudioPage() {
   const [isRepurposing, setIsRepurposing] = useState<boolean>(false);
   const [isMapModalOpen, setIsMapModalOpen] = useState<boolean>(false);
   const [isSimulatorOpen, setIsSimulatorOpen] = useState<boolean>(false);
+  const [isScheduleOpen, setIsScheduleOpen] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   
   // Pointer / Touch Coordinate Tracking (Pan & Zoom)
@@ -360,11 +363,21 @@ export default function CreativeStudioPage() {
 
           <button
             onClick={() => setIsRepurposing(true)}
-            className="bg-[#20201E] hover:bg-[#2A2926] text-[#F4F0E8] border border-[#3A3833] text-xs font-semibold px-3.5 py-2 rounded-full flex items-center gap-1.5 active:scale-95 transition-all shadow-sm"
+            className="bg-[#20201E] hover:bg-[#2A2926] text-[#F4F0E8] border border-[#3A3833] text-xs font-semibold px-3.5 py-2 rounded-full flex items-center gap-1.5 active:scale-95 transition-all shadow-sm cursor-pointer"
             title="Repurpose across Instagram, LinkedIn, Reels, Threads"
           >
             <Share2 className="w-3.5 h-3.5 text-[#D97855]" />
-            <span>Repurpose</span>
+            <span className="hidden sm:inline">Repurpose</span>
+          </button>
+
+          {/* Schedule Broadcast Button */}
+          <button
+            onClick={() => setIsScheduleOpen(true)}
+            className="bg-[#20201E] hover:bg-[#2A2926] text-[#F4F0E8] border border-[#3A3833] text-xs font-semibold px-3 py-2 rounded-full flex items-center gap-1.5 active:scale-95 transition-all shadow-sm cursor-pointer"
+            title="Schedule Broadcast via Broadcaster API"
+          >
+            <Calendar className="w-3.5 h-3.5 text-[#D97855]" />
+            <span className="hidden sm:inline">Schedule</span>
           </button>
 
           <button
@@ -734,6 +747,15 @@ export default function CreativeStudioPage() {
         curvedText={curvedText}
         pan={pan}
         zoom={zoom}
+      />
+
+      {/* Broadcaster Schedule Modal */}
+      <ScheduleModal
+        isOpen={isScheduleOpen}
+        onClose={() => setIsScheduleOpen(false)}
+        canonicalTitle={canvasTitle}
+        captionText={captionText}
+        locationTag={stampText}
       />
     </div>
   );

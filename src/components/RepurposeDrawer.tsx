@@ -12,7 +12,9 @@ import {
   Video,
   Sparkles,
   Download,
+  Calendar,
 } from "lucide-react";
+import ScheduleModal from "./ScheduleModal";
 
 interface RepurposeDrawerProps {
   isOpen: boolean;
@@ -29,6 +31,7 @@ export default function RepurposeDrawer({
 }: RepurposeDrawerProps) {
   const [activeTab, setActiveTab] = useState<"instagram" | "linkedin" | "reel" | "thread">("instagram");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [isScheduleOpen, setIsScheduleOpen] = useState<boolean>(false);
 
   if (!isOpen) return null;
 
@@ -214,14 +217,30 @@ export default function RepurposeDrawer({
             </button>
 
             <button
+              onClick={() => setIsScheduleOpen(true)}
+              className="px-4 py-2 rounded-xl bg-[#20201E] hover:bg-[#2A2926] text-xs font-semibold text-[#D97855] border border-[#D97855]/40 hover:border-[#D97855] transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              <span>Schedule Post</span>
+            </button>
+
+            <button
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-[#C96B4B] hover:bg-[#B3593B] text-white text-xs font-bold shadow-md transition-all active:scale-95"
+              className="px-4 py-2 rounded-xl bg-[#C96B4B] hover:bg-[#B3593B] text-white text-xs font-bold shadow-md transition-all active:scale-95 cursor-pointer"
             >
               Apply to Studio
             </button>
           </div>
         </div>
       </div>
+
+      {/* Broadcaster Schedule Modal */}
+      <ScheduleModal
+        isOpen={isScheduleOpen}
+        onClose={() => setIsScheduleOpen(false)}
+        canonicalTitle={canonicalTitle}
+        captionText={`${currentVariant.hook}\n\n${currentVariant.content}\n\n${currentVariant.cta}`}
+      />
     </div>
   );
 }
