@@ -328,11 +328,11 @@ export default function AnalyticsPage() {
                     </div>
                     <button
                       onClick={() => handleConnect("instagram", true)}
-                      className="inline-flex items-center gap-1.5 bg-[#EDE8DE] hover:bg-[#E5DFD4] text-[#C96B4B] text-xs font-bold px-3.5 py-1.5 rounded-full border border-[#C96B4B]/30 active:scale-95 transition-all self-start cursor-pointer"
-                      title="Load verified sandbox test token"
+                      className="inline-flex items-center gap-1.5 bg-[#EBF2F7] hover:bg-[#DCE7F0] text-[#4F6D85] text-xs font-bold px-3.5 py-1.5 rounded-full border border-[#71879A]/30 active:scale-95 transition-all self-start cursor-pointer"
+                      title="Load sample creator portfolio analytics"
                     >
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>Simulate Demo Account (@ananya.travels)</span>
+                      <Sparkles className="w-3.5 h-3.5 text-[#71879A]" />
+                      <span>Sample Creator Data (@ananya.travels)</span>
                     </button>
                   </div>
 

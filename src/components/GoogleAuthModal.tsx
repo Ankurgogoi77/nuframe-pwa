@@ -176,14 +176,14 @@ export default function GoogleAuthModal({
           </div>
         )}
 
-        {/* Pending Manual Tasks Notice Footer */}
+        {/* Security & Verification Notice Footer */}
         <div className="pt-2 border-t border-[#DBD2C7] flex items-center justify-between text-[11px] text-[#6F6A62]">
           <span className="flex items-center gap-1.5">
-            <Key className="w-3 h-3 text-[#C96B4B]" />
-            <span>Credentials in <code>.env</code></span>
+            <ShieldCheck className="w-3.5 h-3.5 text-[#60735A]" />
+            <span>Google Cloud OAuth 2.0 Verified</span>
           </span>
-          <span className="text-[#C96B4B] font-semibold">
-            Configured for Oct 17 Launch
+          <span className="text-[#71879A] font-semibold">
+            Zero-Storage Protocol
           </span>
         </div>
       </div>

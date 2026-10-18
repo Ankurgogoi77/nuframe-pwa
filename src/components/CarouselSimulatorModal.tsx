@@ -65,10 +65,10 @@ export default function CarouselSimulatorModal({
             <Smartphone className="w-4 h-4 text-[#D97855]" />
             <div>
               <h2 className="font-serif font-bold text-sm text-[#F4F0E8]">
-                Swipe-Test Simulator
+                Interactive Carousel Preview
               </h2>
-              <p className="text-[11px] text-[#9C9890]">
-                Simulating Instagram & LinkedIn carousel swipe flow
+              <p className="text-[11px] text-[#9BB4C9]">
+                Previewing Instagram & LinkedIn continuous swipe flow
               </p>
             </div>
           </div>
@@ -223,11 +223,11 @@ export default function CarouselSimulatorModal({
 
           {/* Swipe Instructions Prompt */}
           <div className="text-center mt-2 space-y-1">
-            <p className="text-xs text-[#9C9890] flex items-center justify-center gap-1 font-medium">
-              <Sparkles className="w-3.5 h-3.5 text-[#D97855]" />
-              Swipe or use arrows to test panoramic alignment
+            <p className="text-xs text-[#9BB4C9] flex items-center justify-center gap-1 font-medium">
+              <Sparkles className="w-3.5 h-3.5 text-[#71879A]" />
+              Swipe or use arrows to preview panoramic alignment
             </p>
-            <p className="text-[10px] text-gray-500">
+            <p className="text-[10px] text-gray-400">
               Notice how the horizon line connects across slice boundaries without seams.
             </p>
           </div>
@@ -235,14 +235,14 @@ export default function CarouselSimulatorModal({
 
         {/* Footer */}
         <div className="p-3.5 border-t border-[#2A2926] bg-[#1A1A1A] flex items-center justify-between">
-          <span className="text-xs text-[#9C9890]">
+          <span className="text-xs text-[#9BB4C9]">
             Format: {aspectRatio} · {slideCount} Seamless Slices
           </span>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-xl bg-[#D97855] hover:bg-[#C96B4B] text-white text-xs font-semibold transition-all cursor-pointer"
+            className="px-4 py-1.5 rounded-xl bg-[#71879A] hover:bg-[#5C7487] text-white text-xs font-semibold transition-all cursor-pointer shadow-sm"
           >
-            Done Testing
+            Done Preview
           </button>
         </div>
       </div>

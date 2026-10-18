@@ -123,9 +123,9 @@ export default function NuFrameApp() {
       label: "Collage",
       icon: LayoutGrid,
       href: "/studio?mode=collage",
-      bg: "bg-[#ECE8E1]",
-      textColor: "text-[#6F6A62]",
-      borderColor: "border-[#6F6A62]/30",
+      bg: "bg-[#EBF2F7]",
+      textColor: "text-[#4F6D85]",
+      borderColor: "border-[#71879A]/30",
     },
   ];
 
@@ -468,51 +468,51 @@ export default function NuFrameApp() {
             </div>
           </section>
 
-          {/* Desktop & Mobile Multi-Platform Banner for AI Builder Cup Review */}
+          {/* Editorial Cloud-Native Architecture Showcase */}
           <section className="hidden md:flex items-center justify-between bg-white border border-[#DBD2C7] rounded-2xl p-5 shadow-sm gap-6">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EAF0E6] text-[#60735A] border border-[#60735A]/20">
-                  AI Builder Cup 2026 Ready
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EBF2F7] text-[#4F6D85] border border-[#71879A]/30">
+                  Cloud-Native Architecture
                 </span>
                 <span className="text-xs font-semibold text-[#6F6A62]">
-                  3-Way Cross-Platform Architecture
+                  Creator Operating System
                 </span>
               </div>
               <h3 className="font-serif text-base font-bold text-[#171717]">
-                Experience NuFrame on Mobile PWA & Desktop Webapp
+                Seamless Visual Storytelling Across Studio, Vault & Cloud
               </h3>
               <p className="text-xs text-[#6F6A62] max-w-lg leading-relaxed">
-                Scan this QR code on your smartphone to launch the <strong>Mobile PWA</strong> with native standalone install, camera access, and offline caching. The <strong>React Native app</strong> is simultaneously running in Expo Go for Play Store publishing.
+                Connect your high-resolution photography directly from Google Drive Vault, let Gemini AI orchestrate your multi-slide narrative, and broadcast across social channels with automated panoramic alignment.
               </p>
               <div className="flex items-center gap-4 pt-1 text-xs font-semibold">
                 <span className="flex items-center gap-1 text-[#C96B4B]">
-                  ✓ Mobile PWA (Zero Install Friction)
+                  ✓ Multi-Slide Carousels
+                </span>
+                <span className="flex items-center gap-1 text-[#4F6D85]">
+                  ✓ Google Gemini Multimodal AI
                 </span>
                 <span className="flex items-center gap-1 text-[#60735A]">
-                  ✓ Desktop Creator OS
-                </span>
-                <span className="flex items-center gap-1 text-[#171717]">
-                  ✓ React Native (Expo Go Active)
+                  ✓ Google Drive Vault
                 </span>
               </div>
             </div>
 
-            <div className="flex flex-col items-center shrink-0 bg-[#F7F4EE] p-3 rounded-2xl border border-[#DBD2C7]">
-              <div className="w-24 h-24 relative bg-white p-1 rounded-xl shadow-inner border border-[#DBD2C7]">
-                <Image
-                  src="/nuframe_pwa_qr.png"
-                  alt="Scan for Mobile PWA"
-                  fill
-                  className="object-contain p-1"
-                />
-              </div>
-              <span className="text-[10px] font-bold text-[#171717] mt-1.5">
-                Scan for Mobile PWA
-              </span>
-              <span className="text-[9px] text-[#6F6A62]">
-                192.168.29.47:3000
-              </span>
+            <div className="flex items-center gap-3 shrink-0">
+              <Link
+                href="/studio"
+                className="inline-flex items-center gap-2 bg-[#71879A] hover:bg-[#5C7487] text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-sm active:scale-95 transition-all"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                Open Creative Studio
+              </Link>
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-1.5 bg-[#EDE8DE] hover:bg-[#E5DFD4] text-[#171717] text-xs font-semibold px-3.5 py-2.5 rounded-full border border-[#DBD2C7] active:scale-95 transition-all"
+              >
+                <FolderOpen className="w-3.5 h-3.5 text-[#C96B4B]" />
+                Open Vault
+              </Link>
             </div>
           </section>
 

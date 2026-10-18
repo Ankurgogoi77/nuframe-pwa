@@ -106,7 +106,8 @@ function DashboardContent() {
   const handleConnect = async () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
     try {
-      const res = await fetch(`${apiUrl}/api/auth/google/login?frontend_redirect=http://localhost:3000/dashboard`);
+      const redirectUri = typeof window !== "undefined" ? encodeURIComponent(`${window.location.origin}/dashboard`) : "";
+      const res = await fetch(`${apiUrl}/api/auth/google/login?frontend_redirect=${redirectUri}`);
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;

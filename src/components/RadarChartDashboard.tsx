@@ -129,7 +129,7 @@ export default function RadarChartDashboard({
     { location: "Hyderabad, Old City", posts: 3, engagement_rate: 8.7 }
   ];
 
-  const FORMAT_COLORS = ["#C96B4B", "#60735A", "#9C9890"];
+  const FORMAT_COLORS = ["#C96B4B", "#71879A", "#60735A"];
 
   return (
     <div className="space-y-6">
@@ -197,18 +197,18 @@ export default function RadarChartDashboard({
 
         {/* Swipe Retention */}
         <div className="bg-white rounded-2xl p-4 border border-[#DBD2C7] shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-20 h-20 bg-[#EDE8DE] rounded-bl-full pointer-events-none group-hover:scale-110 transition-transform" />
+          <div className="absolute top-0 right-0 w-20 h-20 bg-[#71879A]/10 rounded-bl-full pointer-events-none group-hover:scale-110 transition-transform" />
           <div className="flex items-center justify-between text-xs text-[#6F6A62]">
             <span className="font-medium">Avg Swipe Completion</span>
-            <span className="p-1.5 rounded-lg bg-[#EDE8DE] text-[#171717]">
-              <Layers className="w-4 h-4" />
+            <span className="p-1.5 rounded-lg bg-[#EBF2F7] text-[#4F6D85]">
+              <Layers className="w-4 h-4 text-[#71879A]" />
             </span>
           </div>
           <p className="font-serif text-2xl font-bold text-[#171717] mt-1">
             {summary.avg_swipe_completion || 84.2}%
           </p>
           <div className="flex items-center gap-1.5 mt-2">
-            <span className="inline-flex items-center text-[11px] font-bold text-[#60735A] bg-[#EAF0E6] px-1.5 py-0.5 rounded">
+            <span className="inline-flex items-center text-[11px] font-bold text-[#4F6D85] bg-[#EBF2F7] px-1.5 py-0.5 rounded">
               +{summary.completion_change_vs_static || 140}%
             </span>
             <span className="text-[11px] text-[#6F6A62]">vs single static images</span>

@@ -10,6 +10,9 @@
   --text-secondary: #6F6A62;
   --terracotta: #C96B4B;
   --terracotta-dark: #B85C43;
+  --dust-blue: #71879A;
+  --dust-blue-light: #EBF2F7;
+  --dust-blue-dark: #4F6D85;
   --olive: #60735A;
   --gold: #C6A15B;
   --burgundy: #651F2B;
@@ -21,6 +24,7 @@
   --studio-text: #F4F0E8;
   --studio-muted: #9C9890;
   --studio-accent: #D97855;
+  --studio-blue: #71879A;
 }
 
 body {

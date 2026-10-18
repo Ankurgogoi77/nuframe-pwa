@@ -341,14 +341,14 @@ export default function CreativeStudioPage() {
 
         {/* Right CTA: Repurpose, Simulator & Export Buttons */}
         <div className="flex items-center gap-2">
-          {/* Swipe-Test Simulator Button */}
+          {/* Live Carousel Preview Button */}
           <button
             onClick={() => setIsSimulatorOpen(true)}
             className="inline-flex items-center gap-1.5 bg-[#20201E] hover:bg-[#2A2926] text-[#F4F0E8] border border-[#3A3833] text-xs font-semibold px-3 py-2 rounded-full active:scale-95 transition-all shadow-sm cursor-pointer"
-            title="Open CSS Carousel Track Simulator (Swipe-Test)"
+            title="Preview Carousel Track"
           >
-            <Smartphone className="w-3.5 h-3.5 text-[#D97855]" />
-            <span className="hidden sm:inline">Swipe-Test</span>
+            <Smartphone className="w-3.5 h-3.5 text-[#71879A]" />
+            <span className="hidden sm:inline">Live Preview</span>
           </button>
 
           {/* Google Maps Location Tagger Button */}
@@ -600,10 +600,10 @@ export default function CreativeStudioPage() {
               <button
                 type="button"
                 onClick={() => setIsSimulatorOpen(true)}
-                className="text-[#D97855] hover:text-white font-semibold text-xs flex items-center gap-1 cursor-pointer"
+                className="text-[#71879A] hover:text-white font-semibold text-xs flex items-center gap-1 cursor-pointer"
               >
                 <Smartphone className="w-3.5 h-3.5" />
-                <span>Swipe Test</span>
+                <span>Live Preview</span>
               </button>
 
               <label
