@@ -440,12 +440,12 @@ export default function CreativeStudioPage() {
         {/* CENTER VIEWPORT (The Creative Canvas) */}
         {/* ============================================================== */}
         <main className="flex-1 p-4 md:p-6 flex flex-col items-center justify-center overflow-y-auto">
-          {/* Multimodal AI Director Ribbon */}
+          {/* AI Story Director Ribbon */}
           <div className="w-full max-w-xl flex items-center justify-between bg-[#20201E] border border-[#2A2926] rounded-xl px-4 py-2.5 mb-3 text-xs">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-[#D97855]" />
               <span className="text-[#F4F0E8] font-semibold">
-                Multimodal AI Director
+                AI Story Director
               </span>
             </div>
             <button

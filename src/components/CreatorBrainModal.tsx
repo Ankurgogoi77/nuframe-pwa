@@ -52,7 +52,7 @@ export const PRESET_PROFILES: Record<string, CreatorProfileData> = {
     goal: "Authority building & newsletter subscriber conversion.",
     pillars: [
       "Full-Stack Architecture & Cloud Run Teardowns",
-      "AI Engineering Systems & Multimodal Pipelines",
+      "Creative AI Systems & Story Pipelines",
       "Solo Builder Economics & Zero-Egress Storage",
     ],
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
@@ -131,7 +131,7 @@ export default function CreatorBrainModal({
                 </span>
               </div>
               <p className="text-xs text-[#9C9890] mt-0.5">
-                Inspectable creator context that drives the Multimodal AI Director
+                Inspectable creator context that drives the AI Story Director
               </p>
             </div>
           </div>

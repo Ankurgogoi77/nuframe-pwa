@@ -474,7 +474,7 @@ export default function NuFrameApp() {
               <div className="space-y-1 pr-4">
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#C96B4B]/15 text-[#C96B4B] text-[10px] font-bold tracking-wide uppercase">
                   <Sparkles className="w-3 h-3" />
-                  Multimodal AI Director
+                  AI Story Director
                 </div>
                 <h2 className="font-serif text-lg font-bold text-[#171717]">
                   Have fresh photos to journal?
@@ -539,14 +539,14 @@ export default function NuFrameApp() {
                 Seamless Visual Storytelling Across Studio, Vault & Cloud
               </h3>
               <p className="text-xs text-[#6F6A62] max-w-lg leading-relaxed">
-                Connect your high-resolution photography directly from Google Drive Vault, let Gemini AI orchestrate your multi-slide narrative, and broadcast across social channels with automated panoramic alignment.
+                Connect your high-resolution photography directly from Google Drive Vault, let NuFrame AI orchestrate your multi-slide narrative, and broadcast across social channels with automated panoramic alignment.
               </p>
               <div className="flex items-center gap-4 pt-1 text-xs font-semibold">
                 <span className="flex items-center gap-1 text-[#C96B4B]">
                   ✓ Multi-Slide Carousels
                 </span>
                 <span className="flex items-center gap-1 text-[#4F6D85]">
-                  ✓ Google Gemini Multimodal AI
+                  ✓ Intelligent AI Storytelling
                 </span>
                 <span className="flex items-center gap-1 text-[#60735A]">
                   ✓ Google Drive Vault

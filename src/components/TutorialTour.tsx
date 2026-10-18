@@ -35,10 +35,10 @@ const TOUR_STEPS: TourStep[] = [
   },
   {
     targetSelector: '[data-tour="ai-director-banner"]',
-    title: "Multimodal AI Director",
+    title: "AI Story Director",
     description:
       "Upload 3–5 pictures from your camera roll. NuFrame AI analyzes lighting, palette, mood, and drafts structured 3-slide panoramic carousel hooks.",
-    proTip: "Our multimodal engine detects retro film grain, golden hour light, and automatically matches postal stamp dates.",
+    proTip: "NuFrame AI detects retro film grain, golden hour light, and automatically matches postal stamp dates.",
     category: "AI DIRECTOR",
     position: "bottom",
   },

@@ -498,16 +498,16 @@ export default function AnalyticsPage() {
                 </span>
               </div>
               <p className="text-xs text-[#6F6A62] leading-relaxed">
-                Why did <em>"Pondicherry: French Quarter"</em> outperform standard posts by +140%? Our Multimodal Content Director identified that <strong>viewers paused 2.8x longer on Slide 2</strong> because the architectural cutline extended continuously across the split guide. The visual cliffhanger created a psychological drive to swipe to completion.
+                Why did <em>"Pondicherry: French Quarter"</em> outperform standard posts by +140%? NuFrame AI identified that <strong>viewers paused 2.8x longer on Slide 2</strong> because the architectural cutline extended continuously across the split guide. The visual cliffhanger created a psychological drive to swipe to completion.
               </p>
             </section>
 
-            {/* Next Best Action Recommendation (FR-12) */}
+            {/* Next Best Action Recommendation */}
             <section className="bg-white rounded-2xl p-5 border-2 border-[#C96B4B] shadow-md space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#C96B4B] flex items-center gap-1.5">
                   <Lightbulb className="w-3.5 h-3.5" />
-                  Next Best Action Recommendation (FR-12)
+                  AI Story Action Recommendation
                 </span>
                 <span className="text-xs font-semibold text-[#60735A] bg-[#EAF0E6] px-2.5 py-0.5 rounded-full">
                   94% Confidence
@@ -691,8 +691,8 @@ export default function AnalyticsPage() {
 
                   <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#F7F4EE] border border-[#DBD2C7]">
                     <div>
-                      <p className="font-semibold text-[#171717]">Multimodal AI Engine</p>
-                      <p className="text-[10px] text-[#6F6A62]">Multimodal free tier quota</p>
+                      <p className="font-semibold text-[#171717]">NuFrame AI Engine</p>
+                      <p className="text-[10px] text-[#6F6A62]">Creator Plan Included</p>
                     </div>
                     <span className="font-bold text-[#60735A]">₹0</span>
                   </div>
