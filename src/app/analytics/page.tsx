@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import MobileNav from "@/components/MobileNav";
+import RadarChartDashboard from "@/components/RadarChartDashboard";
 import {
   ChevronLeft,
   BarChart2,
@@ -27,12 +28,13 @@ import {
 export default function AnalyticsPage() {
   const [activeTab, setActiveTab] = useState<"performance" | "business">("performance");
   const [metricsData, setMetricsData] = useState<any>(null);
+  const [timeframe, setTimeframe] = useState<string>("7d");
 
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
-        const res = await fetch(`${apiUrl}/api/radar/metrics`);
+        const res = await fetch(`${apiUrl}/api/radar/metrics?timeframe=${timeframe}`);
         if (res.ok) {
           const json = await res.json();
           if (json?.data) {
@@ -44,7 +46,7 @@ export default function AnalyticsPage() {
       }
     };
     fetchMetrics();
-  }, []);
+  }, [timeframe]);
 
   // Multi-Platform Social Connections (Anti-Ban OAuth 2.0 Hub)
   const [connectedPlatforms, setConnectedPlatforms] = useState<string[]>([]);
@@ -417,7 +419,7 @@ export default function AnalyticsPage() {
                 </div>
 
                 {/* ZERO SYNTHETIC DATA ENFORCEMENT BANNER */}
-                <div className="bg-[#FFF9F5] border-2 border-dashed border-[#C96B4B]/40 rounded-2xl p-6 text-center space-y-2">
+                <div className="bg-[#FFF9F5] border-2 border-dashed border-[#C96B4B]/40 rounded-2xl p-6 text-center space-y-3">
                   <div className="w-10 h-10 rounded-full bg-[#C96B4B]/10 text-[#C96B4B] flex items-center justify-center mx-auto">
                     <BarChart2 className="w-5 h-5" />
                   </div>
@@ -427,6 +429,19 @@ export default function AnalyticsPage() {
                   <p className="text-xs text-[#6F6A62] max-w-lg mx-auto leading-relaxed">
                     NuFrame strictly refuses to display fabricated or estimated metrics before permissions are granted. Real-time impressions, swipe-through completion rates, and audience save graphs will populate once you link at least one channel above.
                   </p>
+                  <div className="pt-1">
+                    <button
+                      onClick={() => {
+                        setIsSandboxMode(true);
+                        setConnectedPlatforms(["instagram"]);
+                        setActiveAccountHandle("@ananya.travels");
+                      }}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#C96B4B] text-white text-xs font-bold shadow-sm hover:bg-[#B3593B] active:scale-95 transition-all cursor-pointer"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>⚡ Run Sandbox Dry-Run Pipeline (Verify Charts)</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             ) : (
@@ -464,119 +479,12 @@ export default function AnalyticsPage() {
                   </div>
                 </div>
 
-                {/* KPI Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-white rounded-2xl p-4 border border-[#DBD2C7] shadow-sm space-y-1">
-                <div className="flex items-center justify-between text-xs text-[#6F6A62]">
-                  <span>Avg Swipe Completion</span>
-                  <span className="p-1 rounded bg-[#EAF0E6] text-[#60735A]">
-                    <TrendingUp className="w-3.5 h-3.5" />
-                  </span>
-                </div>
-                <p className="font-serif text-2xl font-bold text-[#171717]">84.2%</p>
-                <p className="text-[11px] text-[#60735A] font-medium">+140% vs single photos</p>
-              </div>
-
-              <div className="bg-white rounded-2xl p-4 border border-[#DBD2C7] shadow-sm space-y-1">
-                <div className="flex items-center justify-between text-xs text-[#6F6A62]">
-                  <span>Community Save Rate</span>
-                  <span className="p-1 rounded bg-[#C96B4B]/10 text-[#C96B4B]">
-                    <Bookmark className="w-3.5 h-3.5" />
-                  </span>
-                </div>
-                <p className="font-serif text-2xl font-bold text-[#C96B4B]">18.6%</p>
-                <p className="text-[11px] text-[#60735A] font-medium">Exceeds 15% Goal</p>
-              </div>
-
-              <div className="bg-white rounded-2xl p-4 border border-[#DBD2C7] shadow-sm space-y-1">
-                <div className="flex items-center justify-between text-xs text-[#6F6A62]">
-                  <span>Slide Consumption Depth</span>
-                  <span className="p-1 rounded bg-[#EDE8DE] text-[#6F6A62]">
-                    <Layers className="w-3.5 h-3.5" />
-                  </span>
-                </div>
-                <p className="font-serif text-2xl font-bold text-[#171717]">3.2 / 3.4</p>
-                <p className="text-[11px] text-[#6F6A62]">Avg slides viewed per session</p>
-              </div>
-
-              <div className="bg-white rounded-2xl p-4 border border-[#DBD2C7] shadow-sm space-y-1">
-                <div className="flex items-center justify-between text-xs text-[#6F6A62]">
-                  <span>Learning Feedback Loop</span>
-                  <span className="p-1 rounded bg-[#EAF0E6] text-[#60735A]">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                  </span>
-                </div>
-                <p className="font-serif text-2xl font-bold text-[#60735A]">Active</p>
-                <p className="text-[11px] text-[#60735A]">Learns from past performance</p>
-              </div>
-            </div>
-
-            {/* Format Comparison Table (FR-10) */}
-            <section className="bg-white rounded-2xl p-5 border border-[#DBD2C7] shadow-sm space-y-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="font-serif text-base font-bold text-[#171717]">
-                    Content Format Performance Comparison
-                  </h2>
-                  <p className="text-xs text-[#6F6A62]">
-                    Normalized metrics across your recent visual content experiments
-                  </p>
-                </div>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EAF0E6] text-[#60735A]">
-                  FR-10 Verified
-                </span>
-              </div>
-
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead>
-                    <tr className="border-b border-[#DBD2C7] text-[#6F6A62] font-semibold">
-                      <th className="pb-2.5">Format</th>
-                      <th className="pb-2.5">Posts</th>
-                      <th className="pb-2.5">Swipe-Through</th>
-                      <th className="pb-2.5">Save Rate</th>
-                      <th className="pb-2.5">Audience Retention</th>
-                      <th className="pb-2.5 text-right">NuFrame Fit</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#EDE8DE]">
-                    <tr className="font-medium text-[#171717]">
-                      <td className="py-3 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#60735A]" />
-                        <strong>4:5 Seamless Panoramic Cuts</strong>
-                      </td>
-                      <td className="py-3">14</td>
-                      <td className="py-3 text-[#60735A] font-bold">84.2%</td>
-                      <td className="py-3 text-[#C96B4B] font-bold">18.6%</td>
-                      <td className="py-3">High (92% screen)</td>
-                      <td className="py-3 text-right text-[#60735A] font-bold">96% High Fit</td>
-                    </tr>
-                    <tr className="text-[#6F6A62]">
-                      <td className="py-3 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#C96B4B]" />
-                        <span>1:1 Retro Polaroid Stories</span>
-                      </td>
-                      <td className="py-3">8</td>
-                      <td className="py-3">61.5%</td>
-                      <td className="py-3">9.2%</td>
-                      <td className="py-3">Medium</td>
-                      <td className="py-3 text-right text-[#C96B4B]">78% Moderate</td>
-                    </tr>
-                    <tr className="text-[#9C9890]">
-                      <td className="py-3 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-gray-400" />
-                        <span>Single Static Image</span>
-                      </td>
-                      <td className="py-3">6</td>
-                      <td className="py-3">31.0%</td>
-                      <td className="py-3">4.1%</td>
-                      <td className="py-3">Low</td>
-                      <td className="py-3 text-right text-gray-500">22% Poor Fit</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
+                {/* WEEK 8: RECHARTS DASHBOARD (KPI Cards, Time-Series Area Chart, Template & Location Bars) */}
+                <RadarChartDashboard
+                  metrics={metricsData || {}}
+                  timeframe={timeframe}
+                  onTimeframeChange={(tf) => setTimeframe(tf)}
+                />
 
             {/* AI Performance Pattern Explanation (FR-11) */}
             <section className="bg-gradient-to-br from-[#EDE8DE] via-[#F4ECE4] to-[#F7F4EE] rounded-2xl p-5 border border-[#C96B4B]/30 space-y-2.5">

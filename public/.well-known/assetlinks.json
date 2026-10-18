@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.nuframe.twa",
+      "sha256_cert_fingerprints": [
+        "7B:04:1E:F2:86:F8:BB:FF:78:58:A2:61:6C:30:C5:A0:C5:65:66:22:A9:85:41:19:64:5E:C8:30:92:24:DD:2B"
+      ]
+    }
+  }
+]
