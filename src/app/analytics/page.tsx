@@ -183,13 +183,13 @@ export default function AnalyticsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           platform: platformId,
-          account_handle: sandbox ? "@ananya.travels" : `@creator.${platformId}`,
+          account_handle: sandbox ? "@creator.stories" : `@creator.${platformId}`,
           is_sandbox: sandbox
         })
       });
     } catch {}
     setConnectedPlatforms((prev) => Array.from(new Set([...prev, platformId])));
-    setActiveAccountHandle(sandbox ? "@ananya.travels" : `@creator.${platformId}`);
+    setActiveAccountHandle(sandbox ? "@creator.stories" : `@creator.${platformId}`);
     setIsSandboxMode(sandbox);
     setIsConnectingPlatform(null);
   };
@@ -332,7 +332,7 @@ export default function AnalyticsPage() {
                       title="Load sample creator portfolio analytics"
                     >
                       <Sparkles className="w-3.5 h-3.5 text-[#71879A]" />
-                      <span>Sample Creator Data (@ananya.travels)</span>
+                      <span>Sample Creator Data (@creator.stories)</span>
                     </button>
                   </div>
 
@@ -434,7 +434,7 @@ export default function AnalyticsPage() {
                       onClick={() => {
                         setIsSandboxMode(true);
                         setConnectedPlatforms(["instagram"]);
-                        setActiveAccountHandle("@ananya.travels");
+                        setActiveAccountHandle("@creator.stories");
                       }}
                       className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#C96B4B] text-white text-xs font-bold shadow-sm hover:bg-[#B3593B] active:scale-95 transition-all cursor-pointer"
                     >
@@ -461,7 +461,7 @@ export default function AnalyticsPage() {
                           className="text-[11px] font-semibold bg-white text-[#171717] px-2.5 py-1 rounded-full border border-[#60735A]/30 capitalize flex items-center gap-1.5 shadow-xs"
                         >
                           {renderSocialIcon(pid, "w-3.5 h-3.5")}
-                          <span>{pid} {isSandboxMode ? "(@ananya.travels)" : activeAccountHandle}</span>
+                          <span>{pid} {isSandboxMode ? "(@creator.stories)" : activeAccountHandle}</span>
                         </span>
                       ))}
                     </div>

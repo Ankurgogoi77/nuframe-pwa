@@ -53,18 +53,63 @@ export default function AuthPage() {
     setIsLoading(true);
 
     try {
+      // Derive display name from inputs, previous persona, or email
+      let finalName = name.trim();
+      if (!finalName) {
+        try {
+          const saved = localStorage.getItem("nuframe_custom_persona");
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed.name && parsed.name !== "Creator") finalName = parsed.name;
+          }
+        } catch {}
+      }
+      if (!finalName && email) {
+        const prefix = email.split("@")[0].replace(/[._-]/g, " ");
+        finalName = prefix
+          .split(" ")
+          .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+          .join(" ");
+      }
+      if (!finalName) finalName = "Creator";
+
+      let finalHandle = handle.trim();
+      if (!finalHandle) {
+        finalHandle = `@${finalName.toLowerCase().replace(/\s+/g, ".")}`;
+      } else if (!finalHandle.startsWith("@")) {
+        finalHandle = `@${finalHandle}`;
+      }
+
       // Simulate/Process authentication
       const userProfile = {
-        name: mode === "signup" ? name : "Ananya Sharma",
+        name: finalName,
         email: email,
-        handle: handle ? (handle.startsWith("@") ? handle : `@${handle}`) : "@ananya.travels",
+        handle: finalHandle,
         role: "Visual Storyteller",
         avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
         signedInAt: new Date().toISOString(),
       };
 
+      // Also seed or update custom persona
+      const customPersona = {
+        name: finalName,
+        role: "Visual Storyteller",
+        niche: "Visual Storytelling & Photography",
+        audience: "Curious community & visual thinkers",
+        tone: "Reflective, observant, natural, editorial",
+        goal: "Build an authentic community and tell compelling visual stories",
+        pillars: [
+          "Everyday Architecture & Light",
+          "Local Cafes & Streets",
+          "Visual Photo Essays"
+        ],
+        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+        paletteColors: ["#B85C43", "#71879A", "#60735A", "#171717"]
+      };
+
       // Persist authenticated state
       localStorage.setItem("nuframe_user", JSON.stringify(userProfile));
+      localStorage.setItem("nuframe_custom_persona", JSON.stringify(customPersona));
       localStorage.setItem("google_access_token", "session_active_" + Date.now());
 
       // Broadcast login event to active tabs
@@ -92,9 +137,9 @@ export default function AuthPage() {
       } else {
         // Fallback demo session if API credentials not set
         const userProfile = {
-          name: "Ananya Sharma",
-          email: "ananya.creator@gmail.com",
-          handle: "@ananya.travels",
+          name: "Creator",
+          email: "creator@nuframe.app",
+          handle: "@creator.lens",
           role: "Visual Storyteller",
           avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
           signedInAt: new Date().toISOString(),
@@ -251,7 +296,7 @@ export default function AuthPage() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Ananya Sharma"
+                    placeholder="e.g. Maya Patel"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="w-full bg-[#F7F4EE] border border-[#DBD2C7] rounded-xl pl-9 pr-3 py-2 text-xs text-[#171717] focus:outline-none focus:ring-1 focus:ring-[#B85C43]"
@@ -267,7 +312,7 @@ export default function AuthPage() {
                   <Compass className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9C9890]" />
                   <input
                     type="text"
-                    placeholder="@ananya.travels"
+                    placeholder="@maya.creates"
                     value={handle}
                     onChange={(e) => setHandle(e.target.value)}
                     className="w-full bg-[#F7F4EE] border border-[#DBD2C7] rounded-xl pl-9 pr-3 py-2 text-xs text-[#171717] focus:outline-none focus:ring-1 focus:ring-[#B85C43]"

@@ -91,7 +91,9 @@ export default function CarouselSimulatorModal({
                   NF
                 </div>
               </div>
-              <span className="font-bold text-xs text-white">ananya.creates</span>
+              <span className="font-bold text-xs text-white">
+                {typeof window !== "undefined" && (JSON.parse(localStorage.getItem("nuframe_user") || "{}")?.handle?.replace("@", "") || JSON.parse(localStorage.getItem("nuframe_custom_persona") || "{}")?.handle?.replace("@", "") || "creator.lens")}
+              </span>
             </div>
             <span className="text-[10px] text-[#9C9890] font-mono">
               Slide {activeSlide + 1}/{slideCount}

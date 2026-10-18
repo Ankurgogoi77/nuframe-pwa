@@ -27,7 +27,7 @@ import {
   Sliders,
   Lightbulb,
 } from "lucide-react";
-import CreatorBrainModal, { PRESET_PROFILES, CreatorProfileData } from "@/components/CreatorBrainModal";
+import CreatorBrainModal, { GENERIC_PROFILE, PRESET_PROFILES, CreatorProfileData } from "@/components/CreatorBrainModal";
 import GoogleAuthModal from "@/components/GoogleAuthModal";
 import GoogleMapsModal from "@/components/GoogleMapsModal";
 
@@ -38,25 +38,43 @@ export default function NuFrameApp() {
   const [isGoogleModalOpen, setIsGoogleModalOpen] = useState(false);
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
   const [selectedMapLocation, setSelectedMapLocation] = useState("Pondicherry, India");
-  const [activeProfile, setActiveProfile] = useState<CreatorProfileData>(PRESET_PROFILES.ananya);
+  const [activeProfile, setActiveProfile] = useState<CreatorProfileData>(GENERIC_PROFILE);
   const [rawIdea, setRawIdea] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userName, setUserName] = useState("Ananya Sharma");
+  const [userName, setUserName] = useState("Creator");
 
   useEffect(() => {
     const checkAuth = () => {
       const token = typeof window !== "undefined" ? (localStorage.getItem("google_access_token") || localStorage.getItem("nuframe_user")) : null;
       const userRaw = typeof window !== "undefined" ? localStorage.getItem("nuframe_user") : null;
+      const customPersonaRaw = typeof window !== "undefined" ? localStorage.getItem("nuframe_custom_persona") : null;
+
       if (token) {
         setIsAuthenticated(true);
+        if (customPersonaRaw) {
+          try {
+            const parsedPersona = JSON.parse(customPersonaRaw);
+            setActiveProfile(parsedPersona);
+            if (parsedPersona.name) setUserName(parsedPersona.name);
+            return;
+          } catch {}
+        }
         if (userRaw) {
           try {
             const parsed = JSON.parse(userRaw);
             if (parsed.name) setUserName(parsed.name);
+            setActiveProfile({
+              ...GENERIC_PROFILE,
+              name: parsed.name || "Creator",
+              role: parsed.role || "Visual Storyteller",
+            });
+            return;
           } catch {}
         }
       } else {
         setIsAuthenticated(false);
+        setActiveProfile(GENERIC_PROFILE);
+        setUserName("Creator");
       }
     };
 
@@ -255,8 +273,10 @@ export default function NuFrameApp() {
               />
             </div>
             <div>
-              <p className="text-xs font-bold text-[#171717]">{activeProfile.name}</p>
-              <p className="text-[10px] text-[#C96B4B] font-semibold">Brain Active ⚙️</p>
+              <p className="text-xs font-bold text-[#171717]">{isAuthenticated ? activeProfile.name : "Guest Creator"}</p>
+              <p className="text-[10px] text-[#B85C43] font-semibold">
+                {isAuthenticated ? "Brain Active ⚙️" : "Sign in to customize"}
+              </p>
             </div>
           </div>
           <button className="text-[#6F6A62] group-hover:text-[#171717]" aria-label="Settings">
@@ -348,10 +368,12 @@ export default function NuFrameApp() {
         <header className="hidden md:flex items-center justify-between px-8 py-5 border-b border-[#DBD2C7]/60 bg-[#F7F4EE]/80 backdrop-blur-md sticky top-0 z-30">
           <div>
             <h1 className="font-serif text-2xl font-bold tracking-tight text-[#171717]">
-              Good morning, {activeProfile.name}
+              {isAuthenticated ? `Good morning, ${activeProfile.name}` : "Welcome to NuFrame"}
             </h1>
             <p className="text-xs text-[#6F6A62] mt-0.5">
-              Turn your moments into visual stories · {activeProfile.role}
+              {isAuthenticated
+                ? `Turn your moments into visual stories · ${activeProfile.role}`
+                : "Turn your moments into visual stories · Creator OS"}
             </p>
           </div>
 

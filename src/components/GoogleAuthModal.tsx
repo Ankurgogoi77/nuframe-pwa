@@ -16,7 +16,7 @@ interface GoogleAuthModalProps {
 export default function GoogleAuthModal({
   isOpen,
   onClose,
-  currentUser = { name: "Ananya Sharma", email: "ananya.creator@gmail.com" }
+  currentUser = { name: "Creator", email: "creator@nuframe.app" }
 }: GoogleAuthModalProps) {
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);

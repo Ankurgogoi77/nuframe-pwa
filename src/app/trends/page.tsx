@@ -131,7 +131,7 @@ export default function MobileTrendsPage() {
             </span>
           </div>
           <p className="text-xs text-[#171717] font-medium leading-relaxed">
-            Signals tracked across <strong>Global $\rightarrow$ India $\rightarrow$ Telangana $\rightarrow$ Hyderabad</strong>.
+            Signals tracked across <strong>Global → India → Telangana → Hyderabad</strong>.
             NuFrame filters out creator fatigue before you spend hours shooting.
           </p>
         </section>
@@ -262,7 +262,7 @@ export default function MobileTrendsPage() {
                 className="w-full mt-2 flex items-center justify-center gap-1.5 bg-[#EDE8DE] border border-[#DBD2C7] text-[#171717] text-xs font-semibold py-2 rounded-xl hover:bg-[#C96B4B] hover:text-white hover:border-[#C96B4B] active:scale-95 transition-all duration-200"
               >
                 <Sparkles className="w-3.5 h-3.5 text-[#C96B4B]" />
-                Evaluate My Creator Fit (Decision Engine)
+                Evaluate Fit for My Persona
               </button>
             </div>
           ))}

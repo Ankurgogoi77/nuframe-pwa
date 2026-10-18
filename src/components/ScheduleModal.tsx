@@ -108,8 +108,17 @@ export default function ScheduleModal({
     setIsSubmitting(true);
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
 
+    let activeUserId = "current_creator";
+    try {
+      const stored = localStorage.getItem("nuframe_user");
+      if (stored) {
+        const u = JSON.parse(stored);
+        if (u.handle) activeUserId = u.handle.replace("@", "");
+      }
+    } catch {}
+
     const payload = {
-      user_id: "ananya_sharma",
+      user_id: activeUserId,
       platforms: selectedPlatforms,
       caption: caption,
       scheduled_time: new Date(scheduledDateTime).toISOString(),
