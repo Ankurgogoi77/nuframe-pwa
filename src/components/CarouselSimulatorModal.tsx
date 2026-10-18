@@ -16,6 +16,7 @@ interface CarouselSimulatorModalProps {
   curvedText: string;
   pan: { x: number; y: number };
   zoom: number;
+  filterStyle?: string;
 }
 
 export default function CarouselSimulatorModal({
@@ -30,6 +31,7 @@ export default function CarouselSimulatorModal({
   curvedText,
   pan,
   zoom,
+  filterStyle = "none",
 }: CarouselSimulatorModalProps) {
   const [activeSlide, setActiveSlide] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -126,6 +128,7 @@ export default function CarouselSimulatorModal({
                         width: `${slideCount * 100}%`,
                         transform: `translateX(${offsetPercentage / slideCount}%) translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
                         transformOrigin: "center center",
+                        filter: filterStyle,
                       }}
                     >
                       <Image
